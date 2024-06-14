@@ -61,6 +61,7 @@ void displayMem();
 void decodeInstructions();
 void printInstruction(int address, int set, int index, int struction);
 
+void printHeader();
 void displayRegisters();
 void changeRegister();
 void changeMEM();
