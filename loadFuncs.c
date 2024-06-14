@@ -3,6 +3,24 @@
 
 #include "XM23p.h"
 
+//handles opening xme files
+FILE *openFile(){
+
+    char xmeFileName[MAXRECORDLENG];
+    FILE *tempFile;
+    printf("\nFile to load: ");
+    scanf("%s", xmeFileName);
+
+    tempFile = fopen(xmeFileName, "r");
+    if(tempFile)
+        printf("Opening %s...\n", xmeFileName);
+    else
+    printf("File not found!\n");
+
+    return tempFile;
+}
+
+
 //reads SRecords into a buffer and
 //passes them off to be interpreted and stored
 void readRecords(FILE *inputFile)

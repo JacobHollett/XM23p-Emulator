@@ -50,7 +50,7 @@ extern unsigned int breakAddr;
 
 extern char instructionSet[][4][6];
 
-
+FILE *openFile();
 void readRecords(FILE *inputFile);
 void parseS0(char **recordPtr);
 void parseS12(char **recordPtr, int flag);
