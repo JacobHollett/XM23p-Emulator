@@ -53,7 +53,8 @@ typedef struct subGroup1
 typedef struct group2
 {
     unsigned char d:3;
-    unsigned char byte;
+    unsigned char b1:5;
+    unsigned char b2:3;
     unsigned char opcode:5;
 } group2;
 
@@ -93,6 +94,7 @@ void displayMem();
 void decodeInstructions();
 void printInstruction(int index, int wb, int rc, int src, int d, int flag);
 void printMoves(int index, int byte, int d);
+unsigned int concatByte(unsigned char b1, unsigned char b2);
 
 void printHeader();
 void displayRegisters();

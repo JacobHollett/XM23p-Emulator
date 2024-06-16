@@ -38,6 +38,8 @@ void decodeInstructions(){
     code iBuffer;
     iBuffer.value = memBlock[instruction].words[regFile[0][7].word/2];
 
+    int tempByte;
+
     while(iBuffer.value && regFile[0][7].word <= breakAddr)
     {
         if(iBuffer.set1.opcode < 0x48)
@@ -52,8 +54,10 @@ void decodeInstructions(){
         else if(iBuffer.set1.opcode == 0x4d)
             printInstruction(iBuffer.set1.sc+14, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 4);
-        else if(iBuffer.set01.upopcode >= 0xc)
-            printMoves(iBuffer.set01.upopcode - 0xc + 19, iBuffer.set2.byte, iBuffer.set2.d);
+        else if(iBuffer.set01.upopcode >= 0xc){
+            tempByte = concatByte(iBuffer.set2.b1, iBuffer.set2.b2);
+            printMoves(iBuffer.set01.upopcode - 0xc + 19, tempByte, iBuffer.set2.d);
+        }
         else
             printf("%04x: %04x\n", regFile[0][7].word/2, iBuffer.set1.opcode);
 
@@ -83,5 +87,11 @@ void printMoves(int index, int byte, int d)
     printf("%04x: %-5s ", regFile[0][7].word, instructions[index]);
     printf("           ");
     printf("BYT: %02x DST: R%i\n", byte, d);
+
+}
+
+unsigned int concatByte(unsigned char b1, unsigned char b2){
+
+    return (b2 << 5 | b1);
 
 }
