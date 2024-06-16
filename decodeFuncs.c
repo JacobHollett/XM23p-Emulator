@@ -3,146 +3,85 @@
 
 #include "XM23p.h"
 
-#define upperbyte 0xFF00
-#define upthree 0xE000
-#define upsix 0xFC00
-#define uptwo 0x1800
-#define midtwo 0x0300
-#define rc 0x80
-#define wb 0x40
-#define sc 0x38
-#define D 0x07
-#define B 0x07F8
+char instructions[][23] = {
 
-char instructionSet[][4][6] = {
-
-                {"ADD",
-                "ADDC",
-                "SUB",
-                "SUBC"},
-
-                {"DADD",
-                "CMP",
-                "XOR",
-                "AND"},
-
-                {"OR",
-                "BIT",
-                "BIC",
-                "BIS"},
-
-                {"MOV",
-                "SWAP",
-                "",
-                ""},
-
-                {"SRA",
-                "RRC",
-                "SWPB",
-                "SXT"},
-
-                {"MOVL",
-                "MOVLZ",
-                "MOVLS",
-                "MOVH"}
+            "ADD",
+            "ADDC",
+            "SUB",
+            "SUBC",
+            "DADD",
+            "CMP",
+            "XOR",
+            "AND",
+            "OR",
+            "BIT",
+            "BIC",
+            "BIS",
+            "MOV",
+            "SWAP",
+            "SRA",
+            "RRC",
+            "",
+            "SWPB",
+            "SXT",
+            "MOVL",
+            "MOVLZ",
+            "MOVLS",
+            "MOVH"
 };
 
-//applies instructionset table to decode instructions
+//Loop over instructions in memory
+//using various structures to decode them
 void decodeInstructions(){
 
     //Store the first instruction in a buffer
-    short iBuffer = memBlock[instruction].words[regFile[0][7].word/2];
-    //indicates we've found the instruction
-    int flag = 0;
+    code iBuffer;
+    iBuffer.value = memBlock[instruction].words[regFile[0][7].word/2];
 
+    while(iBuffer.value && regFile[0][7].word <= breakAddr)
+    {
+        if(iBuffer.set1.opcode < 0x48)
+            printInstruction(iBuffer.set01.index, iBuffer.set1.wb, 
+                    iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 1);
+        else if(iBuffer.set1.opcode < 0x4c)
+            printInstruction(iBuffer.set01.index+0x8, iBuffer.set1.wb, 
+                    iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 2);
+        else if(iBuffer.set1.opcode == 0x4c)
+            printInstruction(iBuffer.set01.rc+12, iBuffer.set1.wb, 
+                    iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 3);
+        else if(iBuffer.set1.opcode == 0x4d)
+            printInstruction(iBuffer.set1.sc+14, iBuffer.set1.wb, 
+                    iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 4);
+        else if(iBuffer.set01.upopcode >= 0xc)
+            printMoves(iBuffer.set01.upopcode - 0xc + 19, iBuffer.set2.byte, iBuffer.set2.d);
+        else
+            printf("%04x: %04x\n", regFile[0][7].word/2, iBuffer.set1.opcode);
 
-    while(iBuffer && regFile[0][7].word <= breakAddr){
-        //search instruction set based on upper 3 bits
-        if(((iBuffer & upthree)>>13) == 0x03){
-            printInstruction(regFile[0][7].word, 5, ((iBuffer & uptwo)>>11), iBuffer);
-            flag = 1;
-        }
-    
-        if(!flag){
-            //Search instruction set based on upper 6 bits
-            switch(((iBuffer & upsix)>>10)){
-
-                case 0x10:
-                    printInstruction(regFile[0][7].word, 0, ((iBuffer & midtwo)>>8), iBuffer);
-                    flag = 1;
-                    break;
-                case 0x11:
-                    printInstruction(regFile[0][7].word, 1, ((iBuffer & midtwo)>>8), iBuffer);
-                    flag = 1;
-                    break;
-                case 0x12:
-                    printInstruction(regFile[0][7].word, 2, ((iBuffer & midtwo)>>8), iBuffer);
-                    flag = 1;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        if(!flag && ((iBuffer & upperbyte)>>8) == 0x004c){
-
-            printInstruction(regFile[0][7].word, 3, ((iBuffer & 0x0080)>>7), iBuffer);
-            flag = 1;
-        }
-
-        if(!flag && ((iBuffer & upperbyte)>>8) == 0x004d){
-            switch((iBuffer & 0x0038)>>3){
-
-                case 0x00:
-                    printInstruction(regFile[0][7].word, 4, ((iBuffer & 0x0038)>>3), iBuffer);
-                    break;
-                case 0x01:
-                    printInstruction(regFile[0][7].word, 4, ((iBuffer & 0x0038)>>3), iBuffer);
-                    break;
-                case 0x03:
-                    printInstruction(regFile[0][7].word, 4, (0x02), iBuffer);
-                    break;
-                case 0x04:
-                    printInstruction(regFile[0][7].word, 4, (0x04), iBuffer);
-                    break;
-                default:
-                    break;
-            }
-            flag = 1;
-        }
-        
-        if(!flag)
-            printf("%04x: 0x%04x\n", regFile[0][7].word, memBlock[instruction].words[regFile[0][7].word/2]);
-            
-        flag = 0;
         regFile[0][7].word+=2;
-        iBuffer = memBlock[instruction].words[regFile[0][7].word/2];
+        iBuffer.value = memBlock[instruction].words[regFile[0][7].word/2];
     }
 }
 
+
 //prints decoded instruction to screen
-void printInstruction(int address, int set, int index, int struction){
+void printInstruction(int index, int wb, int rc, int src, int d, int flag)
+{
+    printf("%04x: %-4s ", regFile[0][7].word, instructions[index]);
+    printf("RC: %i WB: %i ", rc, wb);
+    if ((!rc || flag == 3) && flag != 4)
+        printf("SRC: R%-2i", src);
+    else if(flag != 4)
+        printf("CON: %-3i", src);
+    else
+        printf("        ");
+    printf("DST: R%i\n", d);
+}
 
-    printf("%04x: %s ", address, instructionSet[set][index]);
-
-    if(set <= 2){
-        printf("RC: %i WB: %i ", ((struction & rc)>>7), ((struction & wb)>>6));
-        if(!((struction & rc)>>7))
-            printf("SRC: R%i ", ((struction & sc)>>3));
-        else
-            printf("CON: %04x ", ((struction & sc)>>3));
-        printf("DST: R%i\n", ((struction & D)>>0));
-    }
-    else if(set == 3){
-        printf("WB: %i ", ((struction & wb)>>6));
-        printf("SRC: R%i ", ((struction & sc)>>3));
-        printf("DST: R%i\n", ((struction & D)>>0));
-    }
-    else if(set == 4){
-        printf("WB: %i ", ((struction & wb)>>6));
-        printf("DST: R%i\n", ((struction & D)>>0));
-    }
-    else if(set == 5)
-        printf("B: %04x DST: R%i\n", ((struction & B)>>3), ((struction & D)>>0));
+//similar in function to printInstructions
+void printMoves(int index, int byte, int d)
+{
+    printf("%04x: %-5s ", regFile[0][7].word, instructions[index]);
+    printf("           ");
+    printf("BYT: %02x DST: R%i\n", byte, d);
 
 }

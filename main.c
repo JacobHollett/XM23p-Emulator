@@ -12,7 +12,8 @@ wordContent regFile[REGCON][REGFILE];
 
 unsigned int breakAddr;
 
-//Main directly prints diagnostic info and opens files
+//Main control loop only responsible
+//for calling other functions
 int main(int argc, char *argv[])
 {
     //XME File to open

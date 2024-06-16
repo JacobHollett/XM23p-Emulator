@@ -17,28 +17,60 @@
 #define REGCON 2
 
 
-typedef union memories{
-
+typedef union memories
+{
     unsigned char bytes[MEMSIZE];
     unsigned short words[MEMSIZE/2];
-
 } memory;
 
-typedef struct nibbles{
-
-    unsigned short n0:4;
-    unsigned short n1:4;
-    unsigned short n2:4;
-    unsigned short n3:4;
-
+typedef struct nibbles
+{
+    unsigned char n0:4;
+    unsigned char n1:4;
+    unsigned char n2:4;
+    unsigned char n3:4;
 } nibbles;
 
-typedef union nibbles_bytes_words{
+typedef struct group1
+{
+    unsigned char d:3;
+    unsigned char sc:3;
+    unsigned char wb:1;
+    unsigned char rc:1;
+    unsigned char opcode;
+} group1;
 
+typedef struct subGroup1
+{
+    unsigned char d:3;
+    unsigned char sc:3;
+    unsigned char wb:1;
+    unsigned char rc:1;
+    unsigned char index:3;
+    unsigned char upopcode:5;
+} subGroup1;
+
+typedef struct group2
+{
+    unsigned char d:3;
+    unsigned char byte;
+    unsigned char opcode:5;
+} group2;
+
+typedef union code
+{
+    unsigned short value;
+    group1 set1;
+    subGroup1 set01;
+    group2 set2;
+} code;
+
+
+typedef union nibbles_bytes_words
+{
     unsigned short word;
     unsigned char bytes[2];
-    struct nibbles digits;
-
+    nibbles digits;
 } wordContent;
 
 
@@ -59,7 +91,8 @@ unsigned char hexToByte(unsigned char char1, unsigned char char2);
 void displayMem();
 
 void decodeInstructions();
-void printInstruction(int address, int set, int index, int struction);
+void printInstruction(int index, int wb, int rc, int src, int d, int flag);
+void printMoves(int index, int byte, int d);
 
 void printHeader();
 void displayRegisters();
