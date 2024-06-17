@@ -15,6 +15,8 @@
 #define CHECKSUM 0xFF
 #define REGFILE 8
 #define REGCON 2
+#define IFILE 3
+#define numStructions 23
 
 
 typedef union memories
@@ -30,6 +32,26 @@ typedef struct nibbles
     unsigned char n2:4;
     unsigned char n3:4;
 } nibbles;
+
+typedef struct bits
+{
+    unsigned char b0:1;
+    unsigned char b1:1;
+    unsigned char b2:1;
+    unsigned char b3:1;
+    unsigned char b4:1;
+    unsigned char b5:1;
+    unsigned char b6:1;
+    unsigned char b7:1;
+    unsigned char b8:1;
+    unsigned char b9:1;
+    unsigned char b10:1;
+    unsigned char b11:1;
+    unsigned char b12:1;
+    unsigned char b13:1;
+    unsigned char b14:1;
+    unsigned char b15:1;
+} bits;
 
 typedef struct group1
 {
@@ -72,16 +94,15 @@ typedef union nibbles_bytes_words
     unsigned short word;
     unsigned char bytes[2];
     nibbles digits;
+    bits bit;
 } wordContent;
-
 
 extern char sourceFileName[];
 extern int startingAddress;
 extern memory memBlock[];
 extern wordContent regFile[REGCON][REGFILE];
 extern unsigned int breakAddr;
-
-extern char instructionSet[][4][6];
+extern wordContent instructionRegisters[IFILE];
 
 FILE *openFile();
 void readRecords(FILE *inputFile);
@@ -101,3 +122,9 @@ void displayRegisters();
 void changeRegister();
 void changeMEM();
 void setBreak();
+
+void execute();
+void f0();
+void f1();
+void d0();
+void e0();

@@ -1,9 +1,9 @@
-/*XM23p partial emulator function definitions*/
+/*XM23p partial emulator decode functions    */
 /*ECED 3403                        JH 2024   */
 
 #include "XM23p.h"
 
-char instructions[][23] = {
+char instructions[][numStructions] = {
 
             "ADD",
             "ADDC",

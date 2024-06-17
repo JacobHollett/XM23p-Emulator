@@ -9,7 +9,8 @@ void printHeader(){
     printf("\n | D - Display Memory Contents      R - Display Register Contents   |");
     printf("\n | C - Replace Register Value       T - Replace Memory Value        |");
     printf("\n | I - Decode Loaded Instructions   B - Set Breakpoint              |");
-    printf("\n | L - Load XME File  ? - Display this Menu   X - Close Emulator    |");
+    printf("\n | L - Load XME File                E - Execute Instructions        |");
+    printf("\n | ? - Display this Menu            X - Close Emulator              |");
     printf("\n +------------------------------------------------------------------+\n");
 }
 

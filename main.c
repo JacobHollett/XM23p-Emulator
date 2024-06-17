@@ -7,9 +7,13 @@
 memory memBlock[2];
 
 char sourceFileName[MAXRECORDLENG]; //reusing MAXRECORDLENG here
-
+//contains registers 0-7 and constants
 wordContent regFile[REGCON][REGFILE];
-
+//Program Status Word
+wordContent psw;
+//IMAR, ICTRL, IIMDR
+wordContent instructionRegisters[IFILE];
+//Breakpoint address
 unsigned int breakAddr;
 
 //Main control loop only responsible
@@ -51,6 +55,10 @@ int main(int argc, char *argv[])
                 break;
             case 'b':
                 setBreak();
+                getchar();
+                break;
+            case 'e':
+                execute();
                 getchar();
                 break;
             case 'x':
