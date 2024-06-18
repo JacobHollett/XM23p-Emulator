@@ -49,14 +49,14 @@ void decodeInstructions(){
             printInstruction(iBuffer.set01.index+0x8, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 2);
         else if(iBuffer.set1.opcode == 0x4c)
-            printInstruction(iBuffer.set01.rc+12, iBuffer.set1.wb, 
+            printInstruction(iBuffer.set01.rc+0xc, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 3);
         else if(iBuffer.set1.opcode == 0x4d)
-            printInstruction(iBuffer.set1.sc+14, iBuffer.set1.wb, 
+            printInstruction(iBuffer.set1.sc+0xe, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 4);
         else if(iBuffer.set01.upopcode >= 0xc){
             tempByte = concatByte(iBuffer.set2.b1, iBuffer.set2.b2);
-            printMoves(iBuffer.set01.upopcode - 0xc + 19, tempByte, iBuffer.set2.d);
+            printMoves(iBuffer.set01.upopcode + 0x7, tempByte, iBuffer.set2.d);
         }
         else
             printf("%04x: %04x\n", regFile[0][7].word/2, iBuffer.set1.opcode);
