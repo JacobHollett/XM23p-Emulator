@@ -17,6 +17,11 @@
 #define REGCON 2
 #define IFILE 3
 #define numStructions 23
+#define IMAR 0
+#define IMBR 1
+#define ICTRL 2
+#define READ 0
+#define write 1
 
 
 typedef union memories
@@ -99,10 +104,12 @@ typedef union nibbles_bytes_words
 
 extern char sourceFileName[];
 extern int startingAddress;
+extern int clock;
 extern memory memBlock[];
 extern wordContent regFile[REGCON][REGFILE];
-extern unsigned int breakAddr;
 extern wordContent instructionRegisters[IFILE];
+extern unsigned int breakAddr;
+extern code ir;
 
 FILE *openFile();
 void readRecords(FILE *inputFile);

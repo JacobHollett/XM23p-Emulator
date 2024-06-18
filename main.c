@@ -5,14 +5,17 @@
 
 // Arrays representing data and instruction memory
 memory memBlock[2];
-
+//execution clock
+int clock;
 char sourceFileName[MAXRECORDLENG]; //reusing MAXRECORDLENG here
 //contains registers 0-7 and constants
 wordContent regFile[REGCON][REGFILE];
 //Program Status Word
 wordContent psw;
-//IMAR, ICTRL, IIMDR
+//IMAR, ICTRL, IMDR
 wordContent instructionRegisters[IFILE];
+//IR
+code ir;
 //Breakpoint address
 unsigned int breakAddr;
 
