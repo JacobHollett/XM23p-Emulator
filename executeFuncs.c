@@ -1,8 +1,11 @@
-/*XM23p emulator executions definitions*/
+/*XM23p emulator fetch, decode and */
+/*  execution definitions          */
 /*ECED 3403              JH 2024   */
 
 #include "XM23p.h"
 
+//Set 0/1 by decode, used by execute
+unsigned char movFlag;
 
 void execute(){
     clock = 0;
@@ -37,23 +40,60 @@ void f1(){
 //decode stage manipulates contents of IR
 //turns opcode into instruction index
 //leaves other info intact
+//Sets flag to identify move instructions
 void d0(){
 
-    if(ir.set1.opcode < 0x48)
+    if(ir.set1.opcode < 0x48){
         ir.set1.opcode = ir.set01.index;
-    else if(ir.set1.opcode < 0x4c)
+        movFlag = 0;
+    }
+    else if(ir.set1.opcode < 0x4c){
         ir.set1.opcode = ir.set01.index+0x8;
-    else if(ir.set1.opcode == 0x4c)
+        movFlag = 0;
+    }
+    else if(ir.set1.opcode == 0x4c){
         ir.set1.opcode = ir.set01.index+0xc;
-    else if(ir.set1.opcode == 0x4d)
+        movFlag = 0;
+    }
+    else if(ir.set1.opcode == 0x4d){
         ir.set1.opcode = ir.set01.index+0xe;
+        movFlag = 0;
+    }
     else if(ir.set01.upopcode >= 0xc){
         ir.set01.upopcode = ir.set01.index+0x7;
+        movFlag = 1;
     }
+    else if(ir.set1.opcode  == 0)
+        movFlag = 0;
     else
         printf("%04x: %04x Invalid command\n", regFile[0][7].word, ir.set1.opcode);
 }
 
 void e0(){
-    printf("%i\n", ir.set1.opcode);
+    
+    char tempIndex;
+
+    switch (movFlag)
+    {
+        case 0:
+            tempIndex = ir.set1.opcode;
+            break;
+        case 1:
+            tempIndex = ir.set01.upopcode;
+            break;
+        default:
+            tempIndex = ir.set1.opcode;
+            break;
+    }
+
+    switch (tempIndex)
+    {
+    case 0:
+        ADD(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
+        break;
+    
+    default:
+        break;
+    }
+
 }

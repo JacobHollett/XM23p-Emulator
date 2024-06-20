@@ -1,6 +1,6 @@
 TARGET=XM23p
 
-SRC_FILES=main.c loadFuncs.c decodeFuncs.c debugFuncs.c executeFuncs.c
+SRC_FILES=main.c loadFuncs.c decodeFuncs.c debugFuncs.c executeFuncs.c instructions.c
 
 all: $(TARGET)
 
