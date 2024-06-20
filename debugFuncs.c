@@ -10,6 +10,7 @@ void printHeader(){
     printf("\n | C - Replace Register Value       T - Replace Memory Value        |");
     printf("\n | I - Decode Loaded Instructions   B - Set Breakpoint              |");
     printf("\n | L - Load XME File                E - Execute Instructions        |");
+    printf("\n | S - Display Program Status Word");
     printf("\n | ? - Display this Menu            X - Close Emulator              |");
     printf("\n +------------------------------------------------------------------+\n");
 }
@@ -77,4 +78,17 @@ void setBreak(){
     printf("Break point address (Byte Address): ");
     scanf("%x", &breakAddr);
     printf("Break point set at address 0x%04x\n", breakAddr);
+}
+
+
+void displayPSW(){
+    printf(" -  -  -  -  -  -  - FLT -  -  -  V SLP N  Z  C\n");
+    printf(" %i  %i  %i  %i  %i  %i  %i  %i  ",
+     psw.bit[1].b7, psw.bit[1].b6, psw.bit[1].b5,
+      psw.bit[1].b4, psw.bit[1].b3, psw.bit[1].b2,
+       psw.bit[1].b2, psw.bit[1].b1, psw.bit[1].b0);
+        printf(" %i  %i  %i  %i  %i  %i  %i  %i\n", 
+        psw.bit[0].b7, psw.bit[0].b6, psw.bit[0].b5, 
+        psw.bit[0].b4, psw.bit[0].b3, psw.bit[0].b2, 
+        psw.bit[0].b2, psw.bit[0].b1, psw.bit[0].b0);
 }

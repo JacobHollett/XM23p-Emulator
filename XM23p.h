@@ -128,6 +128,7 @@ void displayRegisters();
 void changeRegister();
 void changeMEM();
 void setBreak();
+void displayPSW();
 
 void execute();
 void f0();
