@@ -64,6 +64,10 @@ int main(int argc, char *argv[])
                 execute();
                 getchar();
                 break;
+            case 's':
+                displayPSW();
+                getchar();
+                break;
             case 'x':
                 return 1;
                 break;
