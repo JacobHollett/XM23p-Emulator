@@ -87,7 +87,7 @@ void displayPSW(){
      psw.bit[1].b7, psw.bit[1].b6, psw.bit[1].b5,
       psw.bit[1].b4, psw.bit[1].b3, psw.bit[1].b2,
        psw.bit[1].b1, psw.bit[1].b0);
-    printf(" %i  %i  %i  %i  %i  %i  %i  %i\n", 
+    printf("%i  %i  %i  %i  %i  %i  %i  %i\n", 
         psw.bit[0].b7, psw.bit[0].b6, psw.bit[0].b5, 
          psw.bit[0].b4, psw.bit[0].b3, psw.bit[0].b2, 
           psw.bit[0].b1, psw.bit[0].b0);
