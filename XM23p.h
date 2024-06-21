@@ -136,4 +136,5 @@ void f1();
 void d0();
 void e0();
 
-void ADD(int RC, int WB, int SC, int D);
+void ADD(int RC, int WB, int SC, int D, int carry);
+void SUB(int RC, int WB, int SC, int D, int carry, int flag);

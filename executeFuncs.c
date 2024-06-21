@@ -71,7 +71,7 @@ void d0(){
 }
 
 void e0(){
-    
+
     char tempIndex;
     
     switch (movFlag)
@@ -90,7 +90,15 @@ void e0(){
     switch (tempIndex)
     {
     case 0:
-        ADD(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
+        ADD(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d, 0);
+        break;
+    case 1:
+        ADD(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d, psw.bit[0].b0);
+    case 2:
+        SUB(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d, 0, 0);
+        break;
+    case 3:
+        SUB(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d, psw.bit[0].b0, 1);
         break;
     
     default:
