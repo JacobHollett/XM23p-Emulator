@@ -8,8 +8,7 @@
 unsigned char movFlag;
 
 void execute(){
-    clock = 0;
-    //added two means setting a break
+    
     while(regFile[0][7].word <= breakAddr || ((clock+2)%2)){
         if (!((clock+2) % 2))
         {
