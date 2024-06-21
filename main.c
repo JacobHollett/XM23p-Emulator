@@ -8,8 +8,9 @@ memory memBlock[2];
 //execution clock
 int clock;
 char sourceFileName[MAXRECORDLENG]; //reusing MAXRECORDLENG here
-//contains registers 0-7 and constants
-wordContent regFile[REGCON][REGFILE];
+//contains registers 0-7 and constants 
+wordContent regFile[REGCON][REGFILE] = {{{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
+                                        {{0}, {1}, {2}, {4}, {8}, {16}, {32}, {-1}}};
 //Program Status Word
 wordContent psw;
 //IMAR, ICTRL, IMDR
