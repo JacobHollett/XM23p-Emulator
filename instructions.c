@@ -8,8 +8,6 @@ unsigned char overflowTable[2][2][2] = {{{0,1},{0,0}},
 
 void ADD(int RC, int WB, int SC, int D){
 
-    printf("We're here\n");
-    printf("%x, %x, %x, %x\n", RC, WB, SC, D);
     twoWord tempResult;
 
     if (WB){
@@ -23,7 +21,6 @@ void ADD(int RC, int WB, int SC, int D){
         psw.bit[0].b2 = tempResult.bit[0].b7;   //Negative
         psw.bit[0].b4 = 
         overflowTable[regFile[RC][SC].bit[0].b7][regFile[0][D].bit[0].b7][tempResult.bit[0].b7];
-        printf("%x\n", tempResult.value);
         regFile[0][D].bytes[0] = tempResult.bytes[0];
         
     }
@@ -39,6 +36,5 @@ void ADD(int RC, int WB, int SC, int D){
         psw.bit[0].b4 = 
         overflowTable[regFile[RC][SC].bit[1].b7][regFile[0][D].bit[1].b7][tempResult.bit[1].b7];
         regFile[0][D].word = tempResult.word[0];
-        printf("%x\n", tempResult.value);
     }
 }

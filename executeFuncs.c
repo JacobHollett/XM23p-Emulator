@@ -8,18 +8,16 @@
 unsigned char movFlag;
 
 void execute(){
-    
+
     while(regFile[0][7].word <= breakAddr || ((clock+2)%2)){
         if (!((clock+2) % 2))
         {
             f0();
             d0();
-            printf("Clock: %i\n", clock);
         }
         else{
             e0();
             f1();
-            printf("Odd clock: %i\n", clock);
         }
         clock++;
     }
@@ -45,7 +43,6 @@ void f1(){
 void d0(){
     
     if(ir.set1.opcode == 0){
-        printf("Nothing in the IR\n");
         ir.set01.upopcode = 8;
         movFlag = 1;
     }
@@ -71,11 +68,10 @@ void d0(){
     }
     else
         printf("%04x: %04x Invalid command\n", regFile[0][7].word, ir.set1.opcode);
-    printf("IR = %04x\n", ir.value);
 }
 
 void e0(){
-    printf("IR: %04x\n", ir.value);
+    
     char tempIndex;
     
     switch (movFlag)
