@@ -9,16 +9,18 @@ unsigned char movFlag;
 
 void execute(){
     clock = 0;
-
-    while(regFile[0][7].word <= breakAddr){
+    //added two means setting a break
+    while(regFile[0][7].word <= breakAddr || ((clock+2)%2)){
         if (!((clock+2) % 2))
         {
             f0();
             d0();
+            printf("Clock: %i\n", clock);
         }
         else{
             e0();
             f1();
+            printf("Odd clock: %i\n", clock);
         }
         clock++;
     }
@@ -37,13 +39,18 @@ void f1(){
     ir.value = instructionRegisters[IMBR].word;
 }
 
-//decode stage manipulates contents of IR
-//turns opcode into instruction index
-//leaves other info intact
+//decode stage copies contents of IR to
+//a temp register then translates
+//its opcode to an index
 //Sets flag to identify move instructions
 void d0(){
-
-    if(ir.set1.opcode < 0x48){
+    
+    if(ir.set1.opcode == 0){
+        printf("Nothing in the IR\n");
+        ir.set01.upopcode = 8;
+        movFlag = 1;
+    }
+    else if(ir.set1.opcode < 0x48){
         ir.set1.opcode = ir.set01.index;
         movFlag = 0;
     }
@@ -63,16 +70,15 @@ void d0(){
         ir.set01.upopcode = ir.set01.index+0x7;
         movFlag = 1;
     }
-    else if(ir.set1.opcode  == 0)
-        movFlag = 0;
     else
         printf("%04x: %04x Invalid command\n", regFile[0][7].word, ir.set1.opcode);
+    printf("IR = %04x\n", ir.value);
 }
 
 void e0(){
-    
+    printf("IR: %04x\n", ir.value);
     char tempIndex;
-
+    
     switch (movFlag)
     {
         case 0:

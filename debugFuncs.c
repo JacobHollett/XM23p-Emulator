@@ -7,10 +7,10 @@ void printHeader(){
 
     printf("\n +--------------------------XM23p Emulator--------------------------+");
     printf("\n | D - Display Memory Contents      R - Display Register Contents   |");
-    printf("\n | C - Replace Register Value       T - Replace Memory Value        |");
+    printf("\n | T - Replace Memory Value         C - Replace Register Value      |");
     printf("\n | I - Decode Loaded Instructions   B - Set Breakpoint              |");
     printf("\n | L - Load XME File                E - Execute Instructions        |");
-    printf("\n | S - Display Program Status Word");
+    printf("\n | S - Display Program Status Word                                  |");
     printf("\n | ? - Display this Menu            X - Close Emulator              |");
     printf("\n +------------------------------------------------------------------+\n");
 }
