@@ -10,7 +10,7 @@ void printHeader(){
     printf("\n | T - Replace Memory Value         C - Replace Register Value      |");
     printf("\n | I - Decode Loaded Instructions   B - Set Breakpoint              |");
     printf("\n | L - Load XME File                E - Execute Instructions        |");
-    printf("\n | S - Display Program Status Word                                  |");
+    printf("\n | S - Display Program Status Word  G - Execute Next Instruction    |");
     printf("\n | ? - Display this Menu            X - Close Emulator              |");
     printf("\n +------------------------------------------------------------------+\n");
 }

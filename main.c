@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 {
     //XME File to open
     FILE *xmeFile;
-
+    int stepExecuteFlag = 0;
     printHeader();
 
     for(;;){
@@ -63,10 +63,19 @@ int main(int argc, char *argv[])
                 break;
             case 'e':
                 execute();
+                printf("Clock: %i PC: %x\n", clock, regFile[0][7].word);
                 getchar();
                 break;
             case 's':
                 displayPSW();
+                getchar();
+                break;
+            case 'g':
+                breakAddr = regFile[0][7].word;
+                if (!stepExecuteFlag) breakAddr+=2;
+                stepExecuteFlag = 1;
+                execute();
+                printf("Clock: %i PC: %x\n", clock, regFile[0][7].word);
                 getchar();
                 break;
             case 'x':

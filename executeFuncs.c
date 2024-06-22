@@ -21,7 +21,6 @@ void execute(){
         }
         clock++;
     }
-    printf("Clock: %i PC: %x\n", clock, regFile[0][7].word);
 }
 
 void f0(){
