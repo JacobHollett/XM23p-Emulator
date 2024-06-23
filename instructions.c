@@ -135,3 +135,30 @@ void CMP(int RC, int WB, int SC, int D){
     }
 
 }
+
+
+void XOR(int RC, int WB, int SC, int D){
+
+    if (WB)
+        regFile[0][D].bytes[0] = regFile[0][D].bytes[0] ^ regFile[RC][SC].bytes[0];
+    else
+        regFile[0][D].word = regFile[0][D].word ^ regFile[RC][SC].word;
+}
+
+
+void AND(int RC, int WB, int SC, int D){
+
+    if (WB)
+        regFile[0][D].bytes[0] = regFile[0][D].bytes[0] & regFile[RC][SC].bytes[0];
+    else
+        regFile[0][D].word = regFile[0][D].word & regFile[RC][SC].word;
+}
+
+
+void OR(int RC, int WB, int SC, int D){
+
+    if (WB)
+        regFile[0][D].bytes[0] = regFile[0][D].bytes[0] | regFile[RC][SC].bytes[0];
+    else
+        regFile[0][D].word = regFile[0][D].word | regFile[RC][SC].word;
+}

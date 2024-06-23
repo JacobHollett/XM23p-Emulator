@@ -106,6 +106,15 @@ void e0(){
     case 5:
         CMP(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
         break;
+    case 6:
+        XOR(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
+        break;
+    case 7:
+        AND(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
+        break;
+    case 8:
+        OR(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
+        break;
     default:
         break;
     }

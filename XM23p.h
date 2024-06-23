@@ -140,3 +140,6 @@ void ADD(int RC, int WB, int SC, int D, int carry);
 void SUB(int RC, int WB, int SC, int D, int carry, int flag);
 void DADD(int RC, int WB, int SC, int D);
 void CMP(int RC, int WB, int SC, int D);
+void XOR(int RC, int WB, int SC, int D);
+void AND(int RC, int WB, int SC, int D);
+void OR(int RC, int WB, int SC, int D);
