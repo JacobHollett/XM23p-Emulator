@@ -102,6 +102,9 @@ void e0(){
     case 4:
         DADD(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
         break;
+    case 5:
+        CMP(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
+        break;
     default:
         break;
     }
