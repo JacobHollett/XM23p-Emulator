@@ -138,3 +138,4 @@ void e0();
 
 void ADD(int RC, int WB, int SC, int D, int carry);
 void SUB(int RC, int WB, int SC, int D, int carry, int flag);
+void DADD(int RC, int WB, int SC, int D);

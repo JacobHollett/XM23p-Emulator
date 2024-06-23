@@ -79,3 +79,29 @@ void SUB(int RC, int WB, int SC, int D, int carry, int flag){
         regFile[0][D].word = tempResult.word[0];
     }
 }
+
+
+void DADD(int RC, int WB, int SC, int D){
+
+    wordContent tempResult;
+    tempResult.word = 0;
+
+    for (int i = 0; i <= 1-WB; i++) {
+        tempResult.digits[i].n0 = (regFile[RC][SC].digits[i].n0 + regFile[0][D].digits[i].n0 + psw.bit[0].b0);
+        if (tempResult.digits[i].n0 >= 10){
+            tempResult.digits[i].n0-=10;
+            psw.bit[0].b0 = 1;
+        }
+        else psw.bit[0].b0 = 0;
+        tempResult.digits[i].n1 = (regFile[RC][SC].digits[i].n1 + regFile[0][D].digits[i].n1 + psw.bit[0].b0);
+        if (tempResult.digits[i].n1 >= 10){
+            tempResult.digits[i].n1-=10;
+            psw.bit[0].b0 = 1;
+        }
+        else psw.bit[0].b0 = 0;
+    }
+
+    if (WB) regFile[0][D].bytes[0] = tempResult.bytes[0];
+    else regFile[0][D].word = tempResult.word;
+    
+}

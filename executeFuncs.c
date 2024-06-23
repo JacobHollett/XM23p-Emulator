@@ -99,7 +99,9 @@ void e0(){
     case 3:
         SUB(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d, psw.bit[0].b0, 1);
         break;
-    
+    case 4:
+        DADD(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
+        break;
     default:
         break;
     }
