@@ -93,6 +93,7 @@ void e0(){
         break;
     case 1:
         ADD(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d, psw.bit[0].b0);
+        break;
     case 2:
         SUB(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d, 0, 0);
         break;

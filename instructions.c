@@ -15,7 +15,6 @@ void ADD(int RC, int WB, int SC, int D, int carry){
 
     if (WB){
         tempResult.value = regFile[RC][SC].bytes[0] + regFile[0][D].bytes[0] + carry;
-        
         psw.bit[0].b0 = tempResult.bit[1].b0;   //Carry
         if (!tempResult.bytes[0])               //Zero
             psw.bit[0].b1 = 1;
@@ -25,11 +24,9 @@ void ADD(int RC, int WB, int SC, int D, int carry){
         psw.bit[0].b4 = 
         overflowTable[regFile[RC][SC].bit[0].b7][regFile[0][D].bit[0].b7][tempResult.bit[0].b7];
         regFile[0][D].bytes[0] = tempResult.bytes[0];
-        
     }
     else{
         tempResult.value = regFile[RC][SC].word + regFile[0][D].word + carry;
-        
         psw.bit[0].b0 = tempResult.bit[2].b0;   //Carry
         if (!tempResult.word[0])                //Zero
             psw.bit[0].b1 = 1;
