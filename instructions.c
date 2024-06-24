@@ -211,6 +211,15 @@ void BIS(int RC, int WB, int SC, int D){
 
 
 void MOV(int WB, int SC, int D){
+
     if (WB) regFile[0][D].bytes[0] = regFile[0][SC].bytes[0];
     else regFile[0][D].word = regFile[0][SC].word;
+}
+
+void SWAP(int SC, int D){
+
+    wordContent tempWord;
+    tempWord.word = regFile[0][SC].word;
+    regFile[0][SC].word = regFile[0][D].word;
+    regFile[0][D].word = tempWord.word;
 }

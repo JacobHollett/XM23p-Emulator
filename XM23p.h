@@ -147,3 +147,4 @@ void BIT(int RC, int WB, int SC, int D);
 void BIC(int RC, int WB, int SC, int D);
 void BIS(int RC, int WB, int SC, int D);
 void MOV(int WB, int SC, int D);
+void SWAP(int SC, int D);

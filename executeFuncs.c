@@ -127,6 +127,9 @@ void e0(){
     case 12:
         MOV(ir.set1.wb, ir.set1.sc, ir.set1.d);
         break;
+    case 13:
+        SWAP(ir.set1.sc, ir.set1.d);
+        break;
     default:
         break;
     }
