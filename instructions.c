@@ -208,3 +208,9 @@ void BIS(int RC, int WB, int SC, int D){
             psw.bit[0].b1 = 0;
     }
 }
+
+
+void MOV(int WB, int SC, int D){
+    if (WB) regFile[0][D].bytes[0] = regFile[0][SC].bytes[0];
+    else regFile[0][D].word = regFile[0][SC].word;
+}
