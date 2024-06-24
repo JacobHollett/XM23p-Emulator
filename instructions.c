@@ -223,3 +223,43 @@ void SWAP(int SC, int D){
     regFile[0][SC].word = regFile[0][D].word;
     regFile[0][D].word = tempWord.word;
 }
+
+
+void SRA(int WB, int D){
+
+    psw.bit[0].b0 = regFile[0][D].bit[0].b0;        //carry
+    if(WB){
+        regFile[0][D].bytes[0] = regFile[0][D].bytes[0]>>1;
+        if(!regFile[0][D].bytes[0]) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;                     //zero
+        psw.bit[0].b2 = regFile[0][7].bit[0].b7;    //neg
+    }
+    else{
+        regFile[0][D].word = regFile[0][D].word>>1;
+        if(!regFile[0][D].word) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;                     //zero
+        psw.bit[0].b2 = regFile[0][7].bit[1].b7;    //neg
+    }
+}
+
+
+void RRC(int WB, int D){
+
+    wordContent tempCarry;
+    tempCarry.bit[0].b0 = psw.bit[0].b0;       //holding old carry
+    psw.bit[0].b0 = regFile[0][D].bit[0].b0;        //carry
+    if(WB){
+        regFile[0][D].bytes[0] = regFile[0][D].bytes[0]>>1;
+        regFile[0][D].bit[0].b7 = tempCarry.bit[0].b0;
+        if(!regFile[0][D].bytes[0]) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;                     //zero
+        psw.bit[0].b2 = regFile[0][7].bit[0].b7;    //neg
+    }
+    else{
+        regFile[0][D].word = regFile[0][D].word>>1;
+        regFile[0][D].bit[1].b7 = tempCarry.bit[0].b0;
+        if(!regFile[0][D].word) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;                     //zero
+        psw.bit[0].b2 = regFile[0][7].bit[1].b7;    //neg
+    }
+}

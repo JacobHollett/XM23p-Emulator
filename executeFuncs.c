@@ -130,6 +130,12 @@ void e0(){
     case 13:
         SWAP(ir.set1.sc, ir.set1.d);
         break;
+    case 14:
+        SRA(ir.set1.wb, ir.set1.d);
+        break;
+    case 15:
+        RRC(ir.set1.wb, ir.set1.d);
+        break;
     default:
         break;
     }
