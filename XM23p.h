@@ -38,14 +38,14 @@ typedef struct nibbles
 
 typedef struct bits
 {
-    unsigned char b0:1;
+    unsigned char b0:1; //LSB
     unsigned char b1:1;
     unsigned char b2:1;
     unsigned char b3:1;
     unsigned char b4:1;
     unsigned char b5:1;
     unsigned char b6:1;
-    unsigned char b7:1;
+    unsigned char b7:1; //MSB
 } bits;
 
 typedef struct group1
@@ -82,7 +82,6 @@ typedef union code
     subGroup1 set01;
     group2 set2;
 } code;
-
 
 typedef union nibbles_bytes_words
 {
@@ -150,3 +149,5 @@ void MOV(int WB, int SC, int D);
 void SWAP(int SC, int D);
 void SRA(int WB, int D);
 void RRC(int WB, int D);
+void SWPB(int D);
+void SXT(int D);

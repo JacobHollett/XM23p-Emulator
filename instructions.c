@@ -263,3 +263,31 @@ void RRC(int WB, int D){
         psw.bit[0].b2 = regFile[0][7].bit[1].b7;    //neg
     }
 }
+
+void SWPB(int D){
+
+    unsigned char tempByte;
+    tempByte = regFile[0][D].bytes[0];
+    regFile[0][D].bytes[0] = regFile[0][D].bytes[1];
+    regFile[0][D].bytes[1] = tempByte;
+    if (!regFile[0][D].word)                //Zero
+        psw.bit[0].b1 = 1;
+    else
+        psw.bit[0].b1 = 0;
+    psw.bit[0].b2 = regFile[0][D].bit[1].b7;   //Negative
+}
+
+
+void SXT(int D){
+
+    if (regFile[0][D].bit[0].b7)
+        regFile[0][D].bytes[1] = 0xFF;
+    else
+        regFile[0][D].bytes[1] = 0;
+    if (!regFile[0][D].word)                //Zero
+        psw.bit[0].b1 = 1;
+    else
+        psw.bit[0].b1 = 0;
+    psw.bit[0].b2 = regFile[0][D].bit[1].b7;   //Negative
+
+}

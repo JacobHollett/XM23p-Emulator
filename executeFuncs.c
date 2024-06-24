@@ -136,6 +136,12 @@ void e0(){
     case 15:
         RRC(ir.set1.wb, ir.set1.d);
         break;
+    case 17:
+        SWPB(ir.set1.d);
+        break;
+    case 18:
+        SXT(ir.set1.d);
+        break;
     default:
         break;
     }
