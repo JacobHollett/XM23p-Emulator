@@ -143,3 +143,6 @@ void CMP(int RC, int WB, int SC, int D);
 void XOR(int RC, int WB, int SC, int D);
 void AND(int RC, int WB, int SC, int D);
 void OR(int RC, int WB, int SC, int D);
+void BIT(int RC, int WB, int SC, int D);
+void BIC(int RC, int WB, int SC, int D);
+void BIS(int RC, int WB, int SC, int D);

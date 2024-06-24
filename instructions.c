@@ -135,3 +135,67 @@ void OR(int RC, int WB, int SC, int D){
     else
         regFile[0][D].word = regFile[0][D].word | regFile[RC][SC].word;
 }
+
+void BIT(int RC, int WB, int SC, int D){
+
+    wordContent tempWord;
+
+    if (WB){
+        tempWord.bytes[0] = regFile[0][D].bytes[0] & (1<<regFile[RC][SC].bytes[0]);
+        if (!tempWord.bytes[0])               //Zero
+            psw.bit[0].b1 = 1;
+        else
+            psw.bit[0].b1 = 0;
+        psw.bit[0].b2 = tempWord.bit[0].b7;     //negative
+    }
+    else{
+        tempWord.word = regFile[0][D].word & (1<<regFile[RC][SC].word);
+        if (!tempWord.word)               //Zero
+            psw.bit[0].b1 = 1;
+        else
+            psw.bit[0].b1 = 0;
+        psw.bit[0].b2 = tempWord.bit[1].b7;     //negative
+    }
+
+}
+
+void BIC(int RC, int WB, int SC, int D){
+
+    unsigned short temp;
+
+    if (WB){
+        temp = 1<<regFile[RC][SC].bytes[0];
+        regFile[0][D].bytes[0] = regFile[0][D].bytes[0] & ~(temp);
+        if (!regFile[0][D].bytes[0])               //Zero
+            psw.bit[0].b1 = 1;
+        else
+            psw.bit[0].b1 = 0;
+    }
+    else{
+        temp = 1<<regFile[RC][SC].word;
+        regFile[0][D].word = regFile[0][D].word & ~(temp);
+        if (!regFile[0][D].word)               //Zero
+            psw.bit[0].b1 = 1;
+        else
+            psw.bit[0].b1 = 0;
+    }
+}
+
+
+void BIS(int RC, int WB, int SC, int D){
+
+    if (WB){
+        regFile[0][D].bytes[0] = regFile[0][D].bytes[0] | (1<<regFile[RC][SC].bytes[0]);
+        if (!regFile[0][D].bytes[0])               //Zero
+            psw.bit[0].b1 = 1;
+        else
+            psw.bit[0].b1 = 0;
+    }
+    else{
+        regFile[0][D].word = regFile[0][D].word | (1<<regFile[RC][SC].word);
+        if (!regFile[0][D].word)               //Zero
+            psw.bit[0].b1 = 1;
+        else
+            psw.bit[0].b1 = 0;
+    }
+}

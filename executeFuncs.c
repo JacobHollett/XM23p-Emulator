@@ -115,6 +115,14 @@ void e0(){
     case 8:
         OR(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
         break;
+    case 9:
+        BIT(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
+        break;
+    case 10:
+        BIC(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
+        break;
+    case 11:
+        BIS(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d);
     default:
         break;
     }
