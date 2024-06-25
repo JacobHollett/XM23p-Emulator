@@ -119,8 +119,8 @@ void displayMem();
 
 void decodeInstructions();
 void printInstruction(int index, int wb, int rc, int src, int d, int flag);
-void printMoves(int index, int byte, int d);
-unsigned int concatByte(unsigned char b1, unsigned char b2);
+void printMoves(int index, unsigned char byte, int d);
+unsigned char concatByte(unsigned char b1, unsigned char b2);
 
 void printHeader();
 void displayRegisters();

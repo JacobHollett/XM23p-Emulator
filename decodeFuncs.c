@@ -38,7 +38,7 @@ void decodeInstructions(){
     code iBuffer;
     iBuffer.value = memBlock[instruction].words[regFile[0][7].word/2];
 
-    int tempByte;
+    unsigned char tempByte;
 
     while(iBuffer.value && regFile[0][7].word <= breakAddr)
     {
@@ -82,7 +82,7 @@ void printInstruction(int index, int wb, int rc, int src, int d, int flag)
 }
 
 //similar in function to printInstructions
-void printMoves(int index, int byte, int d)
+void printMoves(int index, unsigned char byte, int d)
 {
     printf("%04x: %-5s ", regFile[0][7].word, instructions[index]);
     printf("           ");
@@ -90,7 +90,7 @@ void printMoves(int index, int byte, int d)
 
 }
 
-unsigned int concatByte(unsigned char b1, unsigned char b2){
+unsigned char concatByte(unsigned char b1, unsigned char b2){
 
     return (b2 << 5 | b1);
 
