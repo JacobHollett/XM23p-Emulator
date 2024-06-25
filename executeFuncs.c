@@ -142,6 +142,14 @@ void e0(){
     case 18:
         SXT(ir.set1.d);
         break;
+    case 19:
+        break;
+    case 20:
+        break;
+    case 21:
+        break;
+    case 22:
+        break;
     default:
         break;
     }

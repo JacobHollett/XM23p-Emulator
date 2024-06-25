@@ -151,3 +151,7 @@ void SRA(int WB, int D);
 void RRC(int WB, int D);
 void SWPB(int D);
 void SXT(int D);
+void MOVL(int D, unsigned char byte);
+void MOVLZ(int D, unsigned char byte);
+void MOVLS(int D, unsigned char byte);
+void MOVH(int D, unsigned char byte);
