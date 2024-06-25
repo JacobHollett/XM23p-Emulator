@@ -291,3 +291,31 @@ void SXT(int D){
     psw.bit[0].b2 = regFile[0][D].bit[1].b7;   //Negative
 
 }
+
+
+void MOVL(int D, unsigned char byte){
+
+    regFile[0][D].bytes[0] = byte;
+
+}
+
+
+void MOVLZ(int D, unsigned char byte){
+
+    regFile[0][D].bytes[0] = byte;
+    regFile[0][D].bytes[1] = 0x00;
+
+}
+
+
+void MOVLS(int D, unsigned char byte){
+
+    regFile[0][D].bytes[0] = byte;
+    regFile[0][D].bytes[1] = 1;
+}
+
+
+void MOVH(int D, unsigned char byte){
+
+    regFile[0][D].bytes[1] = byte;
+}

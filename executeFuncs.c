@@ -71,7 +71,8 @@ void d0(){
 
 void e0(){
 
-    char tempIndex;
+    unsigned char tempIndex;
+    unsigned char tempByte;
     
     switch (movFlag)
     {
@@ -143,15 +144,22 @@ void e0(){
         SXT(ir.set1.d);
         break;
     case 19:
+        tempByte = concatByte(ir.set2.b1, ir.set2.b2);
+        MOVL(ir.set2.d, tempByte);
         break;
     case 20:
+        tempByte = concatByte(ir.set2.b1, ir.set2.b2);
+        MOVLZ(ir.set2.d, tempByte);
         break;
     case 21:
+        tempByte = concatByte(ir.set2.b1, ir.set2.b2);
+        MOVLS(ir.set2.d, tempByte);
         break;
     case 22:
+        tempByte = concatByte(ir.set2.b1, ir.set2.b2);
+        MOVH(ir.set2.d, tempByte);
         break;
     default:
         break;
     }
-
 }
