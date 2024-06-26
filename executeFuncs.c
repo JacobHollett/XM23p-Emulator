@@ -54,15 +54,15 @@ void d0(){
         movFlag = 0;
     }
     else if(ir.set1.opcode == 0x4c){
-        ir.set1.opcode = ir.set01.index+0xc;
+        ir.set1.opcode = ir.set01.rc+0xc;
         movFlag = 0;
     }
     else if(ir.set1.opcode == 0x4d){
-        ir.set1.opcode = ir.set01.index+0xe;
+        ir.set1.opcode = ir.set01.sc+0xe;
         movFlag = 0;
     }
     else if(ir.set01.upopcode >= 0xc){
-        ir.set01.upopcode = ir.set01.index+0x7;
+        ir.set01.upopcode+=0x7;
         movFlag = 1;
     }
     else
@@ -78,9 +78,11 @@ void e0(){
     {
         case 0:
             tempIndex = ir.set1.opcode;
+            printf("index: %i\n", tempIndex);
             break;
         case 1:
             tempIndex = ir.set01.upopcode;
+            printf("index: %i\n", tempIndex);
             break;
         default:
             tempIndex = ir.set1.opcode;
