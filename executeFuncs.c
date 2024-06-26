@@ -78,11 +78,9 @@ void e0(){
     {
         case 0:
             tempIndex = ir.set1.opcode;
-            printf("index: %i\n", tempIndex);
             break;
         case 1:
             tempIndex = ir.set01.upopcode;
-            printf("index: %i\n", tempIndex);
             break;
         default:
             tempIndex = ir.set1.opcode;
