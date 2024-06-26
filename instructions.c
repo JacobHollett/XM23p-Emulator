@@ -311,7 +311,7 @@ void MOVLZ(int D, unsigned char byte){
 void MOVLS(int D, unsigned char byte){
 
     regFile[0][D].bytes[0] = byte;
-    regFile[0][D].bytes[1] = 1;
+    regFile[0][D].bytes[1] = 0xFF;
 }
 
 
