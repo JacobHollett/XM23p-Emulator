@@ -58,7 +58,7 @@ void d0(){
         movFlag = 0;
     }
     else if(ir.set1.opcode == 0x4d){
-        ir.set1.opcode = ir.set01.sc+0xe;
+        ir.set1.opcode = ir.set01.rc+0xc;
         movFlag = 0;
     }
     else if(ir.set01.upopcode >= 0xc){

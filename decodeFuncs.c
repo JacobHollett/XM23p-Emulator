@@ -52,7 +52,7 @@ void decodeInstructions(){
             printInstruction(iBuffer.set01.rc+0xc, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 3);
         else if(iBuffer.set1.opcode == 0x4d)
-            printInstruction(iBuffer.set1.sc+0xe, iBuffer.set1.wb, 
+            printInstruction(iBuffer.set1.rc+0xc, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 4);
         else if(iBuffer.set01.upopcode >= 0xc){
             tempByte = concatByte(iBuffer.set2.b1, iBuffer.set2.b2);
