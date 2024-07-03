@@ -75,12 +75,25 @@ typedef struct group2
     unsigned char opcode:5;
 } group2;
 
+typedef struct setClrGrp
+{   
+    unsigned char C:1;
+    unsigned char Z:1;
+    unsigned char N:1;
+    unsigned char SLP:1;
+    unsigned char V:1;
+    unsigned char b56:2;
+    unsigned char b7:1;
+    unsigned char opcode;
+} setClrGrp;
+
 typedef union code
 {
     unsigned short value;
     group1 set1;
     subGroup1 set01;
     group2 set2;
+    setClrGrp set3;
 } code;
 
 typedef union nibbles_bytes_words
@@ -120,6 +133,7 @@ void displayMem();
 void decodeInstructions();
 void printInstruction(int index, int wb, int rc, int src, int d, int flag);
 void printMoves(int index, unsigned char byte, int d);
+void printConCodes(int index, code strction);
 unsigned char concatByte(unsigned char b1, unsigned char b2);
 
 void printHeader();

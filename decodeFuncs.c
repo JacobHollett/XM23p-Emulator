@@ -27,7 +27,9 @@ char instructions[][numStructions] = {
             "MOVL",
             "MOVLZ",
             "MOVLS",
-            "MOVH"
+            "MOVH",
+            "SETCC",
+            "CLRCC"
 };
 
 //Loop over instructions in memory
@@ -51,9 +53,11 @@ void decodeInstructions(){
         else if(iBuffer.set1.opcode == 0x4c)
             printInstruction(iBuffer.set01.rc+0xc, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 3);
-        else if(iBuffer.set1.opcode == 0x4d)
+        else if(iBuffer.set1.opcode == 0x4d && iBuffer.set1.rc == 0)
             printInstruction(iBuffer.set1.rc+0xc, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 4);
+        else if(iBuffer.set1.opcode == 0x4d && iBuffer.set1.rc == 1)
+            printConCodes(iBuffer.set1.wb+0x17, iBuffer);
         else if(iBuffer.set01.upopcode >= 0xc){
             tempByte = concatByte(iBuffer.set2.b1, iBuffer.set2.b2);
             printMoves(iBuffer.set01.upopcode + 0x7, tempByte, iBuffer.set2.d);
@@ -90,8 +94,15 @@ void printMoves(int index, unsigned char byte, int d)
 
 }
 
-unsigned char concatByte(unsigned char b1, unsigned char b2){
-
+unsigned char concatByte(unsigned char b1, unsigned char b2)
+{
     return (b2 << 5 | b1);
+}
 
+
+void printConCodes(int index, code strction)
+{
+    printf("%04x: %-5s ", regFile[0][7].word, instructions[index]);
+    printf("BITS: %i%i%i%i%i \n", strction.set3.V, strction.set3.SLP, 
+    strction.set3.N, strction.set3.V, strction.set3.C);    
 }
