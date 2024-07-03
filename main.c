@@ -19,6 +19,8 @@ wordContent instructionRegisters[IFILE];
 code ir;
 //Breakpoint address
 unsigned int breakAddr;
+//debug mode
+unsigned char debugFlag;
 
 //Main control loop only responsible
 //for calling other functions
@@ -62,8 +64,9 @@ int main(int argc, char *argv[])
                 getchar();
                 break;
             case 'e':
+                if(debugFlag)
+                    printf("Clock   PC      Instruction     Fetch       Decode      Execute\n");
                 execute();
-                printf("Clock: %i PC: %x\n", clock, regFile[0][7].word);
                 getchar();
                 break;
             case 's':
@@ -75,7 +78,11 @@ int main(int argc, char *argv[])
                 if (!stepExecuteFlag) breakAddr+=2;
                 stepExecuteFlag = 1;
                 execute();
-                printf("Clock: %i PC: %x\n", clock, regFile[0][7].word);
+                getchar();
+                break;
+            case 'f':
+                if(debugFlag) debugFlag = 0;
+                else debugFlag = 1;
                 getchar();
                 break;
             case 'x':

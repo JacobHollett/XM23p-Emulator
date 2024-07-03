@@ -115,6 +115,7 @@ typedef union twoWord
 extern char sourceFileName[];
 extern int startingAddress;
 extern int clock;
+extern unsigned char debugFlag;
 extern memory memBlock[];
 extern wordContent regFile[REGCON][REGFILE];
 extern wordContent instructionRegisters[IFILE];

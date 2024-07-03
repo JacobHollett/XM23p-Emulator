@@ -10,14 +10,30 @@ unsigned char movFlag;
 void execute(){
 
     while(regFile[0][7].word <= breakAddr || ((clock+2)%2)){
+        if(debugFlag) printf(" %03i", clock);
         if (!((clock+2) % 2))
         {
+            if(debugFlag){
+                printf("   %04x",  regFile[0][7].word);
+                printf("        %04x", memBlock[instruction].words[regFile[0][7].word/2]);
+            }
             f0();
             d0();
+            if(debugFlag){
+                printf("        F0: %04x", instructionRegisters[IMAR].word);
+                printf("    D0: %04x\n", instructionRegisters[IMBR].word);
+            }
         }
         else{
             e0();
             f1();
+            if(debugFlag){
+                printf("            ");
+                printf("               ");
+                printf("F1: %04x", instructionRegisters[IMBR].word);
+                printf("            ");
+                printf("    E0: %04x\n", memBlock[instruction].words[regFile[0][7].word/2-2]);
+            }
         }
         clock++;
     }
