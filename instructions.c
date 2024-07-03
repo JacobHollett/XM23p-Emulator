@@ -315,7 +315,29 @@ void MOVLS(int D, unsigned char byte){
 }
 
 
-void MOVH(int D, unsigned char byte){
-
+void MOVH(int D, unsigned char byte)
+{
     regFile[0][D].bytes[1] = byte;
+}
+
+void SETCC(char V, char SLP, char N, char Z, char C)
+{
+    if (C) psw.bit[0].b0 = 1;
+    if (Z) psw.bit[0].b1 = 1;
+    if (N) psw.bit[0].b2 = 1;
+    if (SLP) psw.bit[0].b3 = 1;
+    if (V) psw.bit[0].b4 = 1;
+    printf("%i%i%i%i%i\n", V, SLP, N, Z, C);
+    printf("%i%i%i%i%i\n", psw.bit[0].b0, psw.bit[0].b1, psw.bit[0].b2, psw.bit[0].b3, psw.bit[0].b4);
+}
+
+void CLRCC(char V, char SLP, char N, char Z, char C)
+{
+    if (C) psw.bit[0].b0 = 0;
+    if (Z) psw.bit[0].b1 = 0;
+    if (N) psw.bit[0].b2 = 0;
+    if (SLP) psw.bit[0].b3 = 0;
+    if (V) psw.bit[0].b4 = 0;
+    printf("%i%i%i%i%i\n", V, SLP, N, Z, C);
+    printf("%i%i%i%i%i\n", psw.bit[0].b0, psw.bit[0].b1, psw.bit[0].b2, psw.bit[0].b3, psw.bit[0].b4);
 }

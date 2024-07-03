@@ -57,8 +57,12 @@ void d0(){
         ir.set1.opcode = ir.set01.rc+0xc;
         movFlag = 0;
     }
-    else if(ir.set1.opcode == 0x4d){
+    else if(ir.set1.opcode == 0x4d && ir.set1.rc == 0){
         ir.set1.opcode = ir.set01.rc+0xc;
+        movFlag = 0;
+    }
+    else if(ir.set1.opcode == 0x4d && ir.set1.rc == 1){
+        ir.set1.opcode = ir.set01.rc+0x17;
         movFlag = 0;
     }
     else if(ir.set01.upopcode >= 0xc){
@@ -158,6 +162,12 @@ void e0(){
     case 22:
         tempByte = concatByte(ir.set2.b1, ir.set2.b2);
         MOVH(ir.set2.d, tempByte);
+        break;
+    case 23:
+        SETCC(ir.set3.V, ir.set3.SLP, ir.set3.N, ir.set3.Z, ir.set3.C);
+        break;
+    case 24:
+        CLRCC(ir.set3.V, ir.set3.SLP, ir.set3.N, ir.set3.Z, ir.set3.C);
         break;
     default:
         break;
