@@ -170,5 +170,5 @@ void MOVL(int D, unsigned char byte);
 void MOVLZ(int D, unsigned char byte);
 void MOVLS(int D, unsigned char byte);
 void MOVH(int D, unsigned char byte);
-void SETCC(char V, char SLP, char N, char Z, char C);
-void CLRCC(char V, char SLP, char N, char Z, char C);
+void SETCC(int V, int SLP, int N, int Z, int C);
+void CLRCC(int V, int SLP, int N, int Z, int C);
