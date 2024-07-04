@@ -17,22 +17,27 @@ void execute(){
                 printf("   %04x",  regFile[0][7].word);
                 printf("        %04x", memBlock[instruction].words[regFile[0][7].word/2]);
             }
+
             f0();
             d0();
+            e1();
+
             if(debugFlag){
-                printf("        F0: %04x", instructionRegisters[IMAR].word);
-                printf("    D0: %04x\n", instructionRegisters[IMBR].word);
+                printf("       F0: %04x", instructionRegisters[IMAR].word);
+                printf("     D0: %04x\n", instructionRegisters[IMBR].word);
             }
         }
         else{
+
             e0();
             f1();
+
             if(debugFlag){
                 printf("            ");
-                printf("               ");
+                printf("              ");
                 printf("F1: %04x", instructionRegisters[IMBR].word);
                 printf("            ");
-                printf("    E0: %04x\n", memBlock[instruction].words[regFile[0][7].word/2-2]);
+                printf("     E0: %04x\n", memBlock[instruction].words[regFile[0][7].word/2-2]);
             }
         }
         clock++;
@@ -89,6 +94,7 @@ void d0(){
         printf("%04x: %04x Invalid command\n", regFile[0][7].word, ir.set1.opcode);
 }
 
+//takes decoded instruction to be executed
 void e0(){
 
     unsigned char tempIndex;
@@ -189,3 +195,6 @@ void e0(){
         break;
     }
 }
+
+//Second execution step used for ld/st
+void e1(){}

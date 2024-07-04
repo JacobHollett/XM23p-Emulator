@@ -16,6 +16,7 @@
 #define REGFILE 8
 #define REGCON 2
 #define IFILE 3
+#define DFILE 3
 #define numStructions 23
 #define IMAR 0
 #define IMBR 1
@@ -119,6 +120,7 @@ extern unsigned char debugFlag;
 extern memory memBlock[];
 extern wordContent regFile[REGCON][REGFILE];
 extern wordContent instructionRegisters[IFILE];
+extern wordContent dataRegisters[DFILE];
 extern wordContent psw;
 extern unsigned int breakAddr;
 extern code ir;
@@ -149,6 +151,7 @@ void f0();
 void f1();
 void d0();
 void e0();
+void e1();
 
 void ADD(int RC, int WB, int SC, int D, int carry);
 void SUB(int RC, int WB, int SC, int D, int carry, int flag);
