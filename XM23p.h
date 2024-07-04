@@ -18,9 +18,9 @@
 #define IFILE 3
 #define DFILE 3
 #define numStructions 23
-#define IMAR 0
-#define IMBR 1
-#define ICTRL 2
+#define MAR 0
+#define MBR 1
+#define CTRL 2
 #define READ 0
 #define write 1
 
@@ -132,6 +132,7 @@ void parseS12(char **recordPtr, int flag);
 void parseS9(char **recordPtr);
 unsigned char hexToByte(unsigned char char1, unsigned char char2);
 void displayMem();
+void initializePipelines();
 
 void decodeInstructions();
 void printInstruction(int index, int wb, int rc, int src, int d, int flag);

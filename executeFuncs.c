@@ -6,7 +6,10 @@
 
 //Set 0/1 by decode, used by execute
 unsigned char movFlag;
+//copy of IMBR used for printing
+wordContent oldIMBR;
 
+//Main execution loop calling execution stages
 void execute(){
 
     while(regFile[0][7].word <= breakAddr || ((clock+2)%2)){
@@ -23,8 +26,8 @@ void execute(){
             e1();
 
             if(debugFlag){
-                printf("       F0: %04x", instructionRegisters[IMAR].word);
-                printf("     D0: %04x\n", instructionRegisters[IMBR].word);
+                printf("       F0: %04x", instructionRegisters[MAR].word);
+                printf("     D0: %04x\n", instructionRegisters[MBR].word);
             }
         }
         else{
@@ -35,9 +38,9 @@ void execute(){
             if(debugFlag){
                 printf("            ");
                 printf("              ");
-                printf("F1: %04x", instructionRegisters[IMBR].word);
+                printf("F1: %04x", instructionRegisters[MBR].word);
                 printf("            ");
-                printf("     E0: %04x\n", memBlock[instruction].words[regFile[0][7].word/2-2]);
+                printf("     E0: %04x\n", oldIMBR.word);
             }
         }
         clock++;
@@ -45,15 +48,16 @@ void execute(){
 }
 
 void f0(){
-    instructionRegisters[IMAR].word = regFile[0][7].word;
-    instructionRegisters[ICTRL].word = READ;
+    instructionRegisters[MAR].word = regFile[0][7].word;
+    instructionRegisters[CTRL].word = READ;
     regFile[0][7].word+=2;
 }
 
 void f1(){
-    instructionRegisters[IMBR].word = 
-        memBlock[instruction].words[instructionRegisters[IMAR].word/2];
-    ir.value = instructionRegisters[IMBR].word;
+    oldIMBR.word = instructionRegisters[MBR].word;
+    instructionRegisters[MBR].word = 
+        memBlock[instruction].words[instructionRegisters[MAR].word/2];
+    ir.value = instructionRegisters[MBR].word;
 }
 
 //decode stage copies contents of IR to

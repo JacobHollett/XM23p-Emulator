@@ -293,3 +293,14 @@ void displayMem()
 
     printf("\n");
 }
+
+//Initializes null characters in pipeline registers
+void initializePipelines()
+{
+    instructionRegisters[MAR].word = 0x4c00;
+    instructionRegisters[CTRL].word = 0x4c00;
+    instructionRegisters[MBR].word = 0x4c00;
+    dataRegisters[MAR].word = 0x4c00;
+    dataRegisters[CTRL].word = 0x4c00;
+    dataRegisters[MBR].word = 0x400;
+}

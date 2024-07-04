@@ -15,6 +15,8 @@ wordContent regFile[REGCON][REGFILE] = {{{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}}
 wordContent psw;
 //IMAR, ICTRL, IMDR
 wordContent instructionRegisters[IFILE];
+//DMAR, DCTRL, DMBR
+wordContent dataRegisters[DFILE];
 //IR
 code ir;
 //Breakpoint address
@@ -29,6 +31,7 @@ int main(int argc, char *argv[])
     //XME File to open
     FILE *xmeFile;
     int stepExecuteFlag = 0;
+    initializePipelines();
     printHeader();
 
     for(;;){
