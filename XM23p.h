@@ -88,6 +88,20 @@ typedef struct setClrGrp
     unsigned char opcode;
 } setClrGrp;
 
+typedef struct LdStGrp
+{
+    unsigned char D:3;
+    unsigned char S:3;
+    unsigned char WB:1;
+    unsigned char INC:1;
+    unsigned char DEC:1;
+    unsigned char PRPO:1;
+    unsigned char index:1;
+    unsigned char code:3;
+    unsigned char index2:1;
+    unsigned char upperBit:1;
+} LdStGrp;
+
 typedef union code
 {
     unsigned short value;
@@ -95,6 +109,7 @@ typedef union code
     subGroup1 set01;
     group2 set2;
     setClrGrp set3;
+    LdStGrp set4;
 } code;
 
 typedef union nibbles_bytes_words
@@ -138,7 +153,9 @@ void decodeInstructions();
 void printInstruction(int index, int wb, int rc, int src, int d, int flag);
 void printMoves(int index, unsigned char byte, int d);
 void printConCodes(int index, code strction);
+void printLdStr(int flag, int index, code strction);
 unsigned char concatByte(unsigned char b1, unsigned char b2);
+unsigned char concatLdStr(code strction);
 
 void printHeader();
 void displayRegisters();
