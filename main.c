@@ -84,8 +84,15 @@ int main(int argc, char *argv[])
                 getchar();
                 break;
             case 'f':
-                if(debugFlag) debugFlag = 0;
-                else debugFlag = 1;
+                printf("Debug mode toggled ");
+                if(debugFlag) {
+                    debugFlag = 0; 
+                    printf("off\n");
+                }
+                else {
+                    debugFlag = 1; 
+                    printf("on\n");
+                }
                 getchar();
                 break;
             case 'x':
