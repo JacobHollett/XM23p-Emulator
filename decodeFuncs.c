@@ -127,13 +127,8 @@ void printConCodes(int index, code strction)
 
 unsigned char concatLdStr(code strction)
 {
-    unsigned char temp1 = strction.set4.INC;
-    unsigned char temp2 = strction.set4.DEC;
-    unsigned char temp3 = strction.set4.PRPO;
-    unsigned char temp4 = strction.set4.index;
-    unsigned char temp5 = strction.set4.code;
-    return ((temp1) | (temp2<<1) | (temp3<<2) | (temp4<<3) | (temp4<<4) | (temp5<<6));
-
+    return ((strction.set4.INC) | (strction.set4.DEC<<1) |
+     (strction.set4.PRPO<<2) | (strction.set4.index<<3) | (strction.set4.code<<4));
 }
 
 void printLdStr(int flag, int index, code strction){
