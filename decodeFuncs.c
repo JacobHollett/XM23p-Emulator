@@ -67,7 +67,7 @@ void decodeInstructions(){
         else if(iBuffer.set1.opcode == 0x4d && iBuffer.set1.rc == 1)
             printConCodes(iBuffer.set1.wb+0x17, iBuffer);
     
-        else if(iBuffer.set4.code == 3)
+        else if(iBuffer.set4.code == 3 && iBuffer.set4.upperBit == 0)
             printLdStr(iBuffer.set4.upperBit, iBuffer.set4.index, iBuffer);
     
         else if(iBuffer.set4.upperBit == 1)
