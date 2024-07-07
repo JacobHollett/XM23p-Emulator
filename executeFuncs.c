@@ -4,8 +4,11 @@
 
 #include "XM23p.h"
 
-//Set 0/1 by decode, used by execute
+//Set by decode, used by execute
+//to distinguish between arithmetic
+//moves and load/stores
 unsigned char movFlag;
+
 //copy of IMBR used for printing
 wordContent oldIMBR;
 
@@ -90,6 +93,13 @@ void d0(){
         ir.set1.opcode = ir.set01.wb+0x17;
         movFlag = 0;
     }
+    else if(ir.set4.code == 3 && ir.set4.upperBit == 0){
+        ir.set4.index2 = ir.set4.index;
+        movFlag = 2;
+    }
+    else if(ir.set4.upperBit == 1){
+        movFlag = 2; 
+    }
     else if(ir.set01.upopcode >= 0xc){
         ir.set01.upopcode+=0x7;
         movFlag = 1;
@@ -98,7 +108,8 @@ void d0(){
         printf("%04x: %04x Invalid command\n", regFile[0][7].word, ir.set1.opcode);
 }
 
-//takes decoded instruction to be executed
+//takes decoded instruction
+//and passes them to methods to be executed
 void e0(){
 
     unsigned char tempIndex;
@@ -111,6 +122,9 @@ void e0(){
             break;
         case 1:
             tempIndex = ir.set01.upopcode;
+            break;
+        case 2:
+            tempIndex = ir.set4.index2 + ir.set4.upperBit*2 + 0x19;
             break;
         default:
             tempIndex = ir.set1.opcode;
@@ -194,6 +208,18 @@ void e0(){
         break;
     case 24:
         CLRCC(ir.set3.V, ir.set3.SLP, ir.set3.N, ir.set3.Z, ir.set3.C);
+        break;
+    case 25:
+        LD();
+        break;
+    case 26:
+        ST();
+        break;
+    case 27:
+        LDR();
+        break;
+    case 28:
+        STR();
         break;
     default:
         break;

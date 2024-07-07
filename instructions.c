@@ -337,3 +337,15 @@ void CLRCC(int V, int SLP, int N, int Z, int C)
     if(SLP) psw.bit[0].b3 = 0;
     if(V) psw.bit[0].b4 = 0;
 }
+
+void LD(){
+}
+
+void ST(){
+}
+
+void LDR(){
+}
+
+void STR(){
+}

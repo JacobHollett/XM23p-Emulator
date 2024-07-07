@@ -193,3 +193,7 @@ void MOVLS(int D, unsigned char byte);
 void MOVH(int D, unsigned char byte);
 void SETCC(int V, int SLP, int N, int Z, int C);
 void CLRCC(int V, int SLP, int N, int Z, int C);
+void LD();
+void ST();
+void LLR();
+void STR();
