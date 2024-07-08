@@ -306,10 +306,10 @@ void ldrStrHandle(int flag, char byte)
 {
     switch(flag){
         case 0:
-            dataRegisters[MAR].word = regFile[0][ir.set4.S].word + (byte*(2-ir.set4.WB));
+            dataRegisters[MAR].word = (signed int)regFile[0][ir.set4.S].word + (signed int)(byte*(2-ir.set4.WB));
             break;
         case 1:
-            dataRegisters[MAR].word = regFile[0][ir.set4.D].word + (byte*(2-ir.set4.WB));
+            dataRegisters[MAR].word = (signed int)regFile[0][ir.set4.D].word + (signed int)(byte*(2-ir.set4.WB));
             break;
     }
     dataRegisters[CTRL].bytes[0] = ir.set4.index2;
