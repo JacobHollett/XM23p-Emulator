@@ -10,7 +10,7 @@
 unsigned char movFlag;
 
 //copy of IMBR used for printing
-wordContent oldIMBR;
+code oldIMBR;
 
 //Main execution loop calling execution stages
 void execute(){
@@ -23,11 +23,9 @@ void execute(){
                 printf("   %04x",  regFile[0][7].word);
                 printf("        %04x", memBlock[instruction].words[regFile[0][7].word/2]);
             }
-
+            e1();
             f0();
             d0();
-            e1();
-
             if(debugFlag){
                 printf("       F0: %04x", instructionRegisters[MAR].word);
                 printf("     D0: %04x\n", instructionRegisters[MBR].word);
@@ -43,7 +41,7 @@ void execute(){
                 printf("              ");
                 printf("F1: %04x", instructionRegisters[MBR].word);
                 printf("            ");
-                printf("     E0: %04x\n", oldIMBR.word);
+                printf("     E0: %04x\n", oldIMBR.value );
             }
         }
         clock++;
@@ -56,8 +54,10 @@ void f0(){
     regFile[0][7].word+=2;
 }
 
+//Hold old IMBR, fetch new one and make a
+//copy to be manipulated
 void f1(){
-    oldIMBR.word = instructionRegisters[MBR].word;
+    oldIMBR.value = instructionRegisters[MBR].word;
     instructionRegisters[MBR].word = 
         memBlock[instruction].words[instructionRegisters[MAR].word/2];
     ir.value = instructionRegisters[MBR].word;
@@ -94,11 +94,10 @@ void d0(){
         movFlag = 0;
     }
     else if(ir.set4.code == 3 && ir.set4.upperBit == 0){
-        ir.set4.index2 = ir.set4.index;
         movFlag = 2;
     }
     else if(ir.set4.upperBit == 1){
-        movFlag = 2; 
+        movFlag = 3; 
     }
     else if(ir.set01.upopcode >= 0xc){
         ir.set01.upopcode+=0x7;
@@ -110,6 +109,7 @@ void d0(){
 
 //takes decoded instruction
 //and passes them to methods to be executed
+//for ld/str sets data registers
 void e0(){
 
     unsigned char tempIndex;
@@ -123,8 +123,16 @@ void e0(){
         case 1:
             tempIndex = ir.set01.upopcode;
             break;
+        //ld/st cases
         case 2:
-            tempIndex = ir.set4.index2 + ir.set4.upperBit*2 + 0x19;
+            tempIndex = 25;
+            ldStHandle(ir.set4.index);
+            break;
+        //ldr/str
+        case 3:
+            tempIndex = 25;
+            tempByte = concatLdStr(ir);
+            ldrStrHandle(ir.set4.index2, tempByte);
             break;
         default:
             tempIndex = ir.set1.opcode;
@@ -209,22 +217,83 @@ void e0(){
     case 24:
         CLRCC(ir.set3.V, ir.set3.SLP, ir.set3.N, ir.set3.Z, ir.set3.C);
         break;
-    case 25:
-        LD();
-        break;
-    case 26:
-        ST();
-        break;
-    case 27:
-        LDR();
-        break;
-    case 28:
-        STR();
-        break;
     default:
         break;
     }
 }
 
 //Second execution step used for ld/st
-void e1(){}
+void e1()
+{
+    if(movFlag > 1){
+        switch(dataRegisters[CTRL].bytes[0]){
+            case 0:
+                if(!dataRegisters[CTRL].bytes[1])
+                    regFile[0][oldIMBR.set4.D].word = 
+                    memBlock[data].words[dataRegisters[MAR].word/2];
+                else
+                    regFile[0][oldIMBR.set4.D].bytes[0] = 
+                    memBlock[data].bytes[dataRegisters[MAR].word];
+                break;
+            case 1:
+                if(!dataRegisters[CTRL].bytes[1])
+                    memBlock[data].words[dataRegisters[MAR].word/2] = 
+                    regFile[0][oldIMBR.set4.S].word;
+                else
+                    memBlock[data].bytes[dataRegisters[MAR].word] = 
+                    regFile[0][oldIMBR.set4.S].word;
+                break;
+        }
+    }
+}
+
+//Handles setting up data pipeline registers
+//flag handles which instruction
+void ldStHandle(int flag)
+{
+    //used as a scaling factor to increment/decrement by bytes or words
+    unsigned char quanta = 2 - ir.set4.WB;
+
+    switch(flag){
+        case 0:
+            if(!ir.set4.PRPO){
+                regFile[0][ir.set4.S].word += ir.set4.INC * quanta;
+                regFile[0][ir.set4.S].word -= ir.set4.DEC * quanta;
+            }
+            dataRegisters[MAR].word = regFile[0][ir.set4.S].word;
+            if(ir.set4.PRPO){
+                regFile[0][ir.set4.S].word += ir.set4.INC * quanta;
+                regFile[0][ir.set4.S].word -= ir.set4.DEC * quanta;
+            }
+            break;
+        case 1:
+            if(!ir.set4.PRPO){
+                regFile[0][ir.set4.D].word += ir.set4.INC * quanta;
+                regFile[0][ir.set4.D].word -= ir.set4.DEC * quanta;
+            }
+            dataRegisters[MAR].word = regFile[0][ir.set4.D].word;
+            if(ir.set4.PRPO){
+                regFile[0][ir.set4.D].word += ir.set4.INC * quanta;
+                regFile[0][ir.set4.D].word -= ir.set4.DEC * quanta;
+            }
+            break;
+    }
+    dataRegisters[CTRL].bytes[0] = ir.set4.index;
+    dataRegisters[CTRL].bytes[1] = ir.set4.WB;
+}
+
+//handles setting up data pipeline registers
+//flag handles which instruction
+void ldrStrHandle(int flag, unsigned char byte)
+{
+    switch(flag){
+        case 0:
+            dataRegisters[MAR].word = regFile[0][ir.set4.S].word + byte;
+            break;
+        case 1:
+            dataRegisters[MAR].word = regFile[0][ir.set4.D].word + byte;
+            break;
+    }
+    dataRegisters[CTRL].bytes[0] = ir.set4.index2;
+    dataRegisters[CTRL].bytes[1] = ir.set4.WB;
+}
