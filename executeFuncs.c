@@ -73,24 +73,24 @@ void d0(){
         ir.set01.upopcode = 8;
         movFlag = 1;
     }
-    else if(ir.set1.opcode < 0x48){
+    else if(ir.set1.opcode < GRP1){
         ir.set1.opcode = ir.set01.index;
         movFlag = 0;
     }
-    else if(ir.set1.opcode < 0x4c){
-        ir.set1.opcode = ir.set01.index+0x8;
+    else if(ir.set1.opcode < GRP2){
+        ir.set1.opcode = ir.set01.index+OFFSET1;
         movFlag = 0;
     }
-    else if(ir.set1.opcode == 0x4c){
-        ir.set1.opcode = ir.set01.rc+0xc;
+    else if(ir.set1.opcode == GRP2){
+        ir.set1.opcode = ir.set01.rc+MOVGRP;
         movFlag = 0;
     }
-    else if(ir.set1.opcode == 0x4d && ir.set1.rc == 0){
-        ir.set1.opcode = ir.set01.rc+0xc;
+    else if(ir.set1.opcode == GRP3 && ir.set1.rc == 0){
+        ir.set1.opcode = ir.set01.rc+MOVGRP;
         movFlag = 0;
     }
-    else if(ir.set1.opcode == 0x4d && ir.set1.rc == 1){
-        ir.set1.opcode = ir.set01.wb+0x17;
+    else if(ir.set1.opcode == GRP3 && ir.set1.rc == 1){
+        ir.set1.opcode = ir.set01.wb+OFFSET2;
         movFlag = 0;
     }
     else if(ir.set4.code == 3 && ir.set4.upperBit == 0){
@@ -99,8 +99,8 @@ void d0(){
     else if(ir.set4.upperBit == 1){
         movFlag = 3; 
     }
-    else if(ir.set01.upopcode >= 0xc){
-        ir.set01.upopcode+=0x7;
+    else if(ir.set01.upopcode >= MOVGRP){
+        ir.set01.upopcode+=OFFSET3;
         movFlag = 1;
     }
     else
@@ -223,6 +223,7 @@ void e0(){
 }
 
 //Second execution step used for ld/st
+//Doesn't pass off to other functions like e0
 void e1()
 {
     if(movFlag > 1){

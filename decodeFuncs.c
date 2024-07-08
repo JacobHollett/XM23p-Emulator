@@ -48,24 +48,24 @@ void decodeInstructions(){
 
     while(iBuffer.value && regFile[0][7].word <= breakAddr)
     {
-        if(iBuffer.set1.opcode < 0x48)
+        if(iBuffer.set1.opcode < GRP1)
             printInstruction(iBuffer.set01.index, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 1);
 
-        else if(iBuffer.set1.opcode < 0x4c)
-            printInstruction(iBuffer.set01.index+0x8, iBuffer.set1.wb, 
+        else if(iBuffer.set1.opcode < GRP2)
+            printInstruction(iBuffer.set01.index+OFFSET1, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 2);
 
-        else if(iBuffer.set1.opcode == 0x4c)
-            printInstruction(iBuffer.set01.rc+0xc, iBuffer.set1.wb, 
+        else if(iBuffer.set1.opcode == GRP2)
+            printInstruction(iBuffer.set01.rc+MOVGRP, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 3);
 
-        else if(iBuffer.set1.opcode == 0x4d && iBuffer.set1.rc == 0)
-            printInstruction(iBuffer.set1.rc+0xc, iBuffer.set1.wb, 
+        else if(iBuffer.set1.opcode == GRP3 && iBuffer.set1.rc == 0)
+            printInstruction(iBuffer.set1.rc+MOVGRP, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 4);
 
-        else if(iBuffer.set1.opcode == 0x4d && iBuffer.set1.rc == 1)
-            printConCodes(iBuffer.set1.wb+0x17, iBuffer);
+        else if(iBuffer.set1.opcode == GRP3 && iBuffer.set1.rc == 1)
+            printConCodes(iBuffer.set1.wb+OFFSET2, iBuffer);
     
         else if(iBuffer.set4.code == 3 && iBuffer.set4.upperBit == 0)
             printLdStr(iBuffer.set4.upperBit, iBuffer.set4.index, iBuffer);
@@ -73,9 +73,9 @@ void decodeInstructions(){
         else if(iBuffer.set4.upperBit == 1)
             printLdStr(iBuffer.set4.upperBit, iBuffer.set4.index2, iBuffer);
     
-        else if(iBuffer.set2.opcode >= 0xc){
+        else if(iBuffer.set2.opcode >= MOVGRP){
             tempByte = concatByte(iBuffer.set2.b1, iBuffer.set2.b2);
-            printMoves(iBuffer.set01.upopcode + 0x7, tempByte, iBuffer.set2.d);
+            printMoves(iBuffer.set01.upopcode + OFFSET3, tempByte, iBuffer.set2.d);
         }
         else
             printf("%04x: %04x\n", regFile[0][7].word/2, iBuffer.set1.opcode);
@@ -133,7 +133,7 @@ unsigned char concatLdStr(code strction)
 
 void printLdStr(int flag, int index, code strction){
 
-    printf("%04x: %-4s ", regFile[0][7].word, instructions[0x19+flag*2+index]);
+    printf("%04x: %-4s ", regFile[0][7].word, instructions[OFFSET4+flag*2+index]);
 
     switch(flag){
         case 0:

@@ -24,6 +24,15 @@
 #define READ 0
 #define write 1
 
+#define GRP1 0x48
+#define GRP2 0x4C
+#define GRP3 0x4d
+#define MOVGRP 0xc
+#define OFFSET1 0x8
+#define OFFSET2 0x17
+#define OFFSET3 0x7
+#define OFFSET4 0x19
+
 
 typedef union memories
 {
