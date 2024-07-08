@@ -164,7 +164,7 @@ void printMoves(int index, unsigned char byte, int d);
 void printConCodes(int index, code strction);
 void printLdStr(int flag, int index, code strction);
 unsigned char concatByte(unsigned char b1, unsigned char b2);
-unsigned char concatLdStr(code strction);
+char concatLdStr(code strction);
 
 void printHeader();
 void displayRegisters();

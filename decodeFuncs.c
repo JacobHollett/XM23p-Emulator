@@ -125,10 +125,12 @@ void printConCodes(int index, code strction)
 }
 
 
-unsigned char concatLdStr(code strction)
+char concatLdStr(code strction)
 {
-    return ((strction.set4.INC) | (strction.set4.DEC<<1) |
+    char tempByte = ((strction.set4.INC) | (strction.set4.DEC<<1) |
      (strction.set4.PRPO<<2) | (strction.set4.index<<3) | (strction.set4.code<<4));
+    if(strction.set4.code >= 4) tempByte = tempByte & 0x40; //sign extending
+    return tempByte;
 }
 
 void printLdStr(int flag, int index, code strction){
