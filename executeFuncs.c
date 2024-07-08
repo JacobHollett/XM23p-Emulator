@@ -302,7 +302,7 @@ void ldStHandle(int flag)
 
 //handles setting up data pipeline registers
 //flag handles which instruction
-void ldrStrHandle(int flag, unsigned char byte)
+void ldrStrHandle(int flag, char byte)
 {
     switch(flag){
         case 0:
