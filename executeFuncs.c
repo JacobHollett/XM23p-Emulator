@@ -9,6 +9,9 @@
 //moves and load/stores
 unsigned char movFlag;
 
+//copy of last movFlag used for printing
+unsigned char oldMovFlag;
+
 //copy of IMBR used for printing
 code oldIMBR;
 
@@ -28,7 +31,9 @@ void execute(){
             d0();
             if(debugFlag){
                 printf("       F0: %04x", instructionRegisters[MAR].word);
-                printf("     D0: %04x\n", instructionRegisters[MBR].word);
+                printf("     D0: %04x", instructionRegisters[MBR].word);
+                if(oldMovFlag> 1) printf("    E1: %04x", oldIMBR.value);
+                printf("\n");
             }
         }
         else{
@@ -68,6 +73,8 @@ void f1(){
 //its opcode to an index
 //Sets flag to identify move instructions
 void d0(){
+
+    oldMovFlag = movFlag;
     
     if(ir.set1.opcode == 0){
         ir.set01.upopcode = 8;
