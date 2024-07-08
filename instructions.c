@@ -92,7 +92,7 @@ void DADD(int RC, int WB, int SC, int D){
         }
         else psw.bit[0].b0 = 0; //carry
     }
-
+    //zero
     if (WB){
         regFile[0][D].bytes[0] = tempResult.bytes[0];
         if(!tempResult.bytes[0]) psw.bit[0].b1 = 1;
@@ -103,6 +103,8 @@ void DADD(int RC, int WB, int SC, int D){
         if(!tempResult.word) psw.bit[0].b1 = 1;
         else psw.bit[0].b1 = 0;
     }
+    psw.bit[0].b2 = 0; //negative
+    psw.bit[0].b4 = 0; //overflow
     
 }
 
@@ -121,28 +123,58 @@ void CMP(int RC, int WB, int SC, int D){
 
 void XOR(int RC, int WB, int SC, int D){
 
-    if (WB)
+    if (WB){
         regFile[0][D].bytes[0] = regFile[0][D].bytes[0] ^ regFile[RC][SC].bytes[0];
-    else
+        if(!regFile[0][D].bytes[0]) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;
+        if(regFile[0][D].bit[0].b7) psw.bit[0].b2 = 1;
+        else psw.bit[0].b2 = 0;
+    }
+    else{
         regFile[0][D].word = regFile[0][D].word ^ regFile[RC][SC].word;
+        if(!regFile[0][D].word) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;
+        if(regFile[0][D].bit[1].b7) psw.bit[0].b2 = 1;
+        else psw.bit[0].b2 = 0;
+    }
 }
 
 
 void AND(int RC, int WB, int SC, int D){
 
-    if (WB)
+    if (WB){
         regFile[0][D].bytes[0] = regFile[0][D].bytes[0] & regFile[RC][SC].bytes[0];
-    else
+        if(!regFile[0][D].bytes[0]) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;
+        if(regFile[0][D].bit[0].b7) psw.bit[0].b2 = 1;
+        else psw.bit[0].b2 = 0;
+    } 
+    else{
         regFile[0][D].word = regFile[0][D].word & regFile[RC][SC].word;
+        if(!regFile[0][D].word) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;
+        if(regFile[0][D].bit[1].b7) psw.bit[0].b2 = 1;
+        else psw.bit[0].b2 = 0;
+    }
 }
 
 
 void OR(int RC, int WB, int SC, int D){
 
-    if (WB)
+    if (WB){
         regFile[0][D].bytes[0] = regFile[0][D].bytes[0] | regFile[RC][SC].bytes[0];
-    else
+        if(!regFile[0][D].bytes[0]) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;
+        if(regFile[0][D].bit[0].b7) psw.bit[0].b2 = 1;
+        else psw.bit[0].b2 = 0;
+    }
+    else{
         regFile[0][D].word = regFile[0][D].word | regFile[RC][SC].word;
+        if(!regFile[0][D].word) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;
+        if(regFile[0][D].bit[1].b7) psw.bit[0].b2 = 1;
+        else psw.bit[0].b2 = 0;
+    }
 }
 
 void BIT(int RC, int WB, int SC, int D){
@@ -151,19 +183,13 @@ void BIT(int RC, int WB, int SC, int D){
 
     if (WB){
         tempWord.bytes[0] = regFile[0][D].bytes[0] & (1<<regFile[RC][SC].bytes[0]);
-        if (!tempWord.bytes[0])               //Zero
-            psw.bit[0].b1 = 1;
-        else
-            psw.bit[0].b1 = 0;
-        psw.bit[0].b2 = tempWord.bit[0].b7;     //negative
+        if (!tempWord.bytes[0]) psw.bit[0].b1 = 1;  //zero
+        else psw.bit[0].b1 = 0;
     }
     else{
         tempWord.word = regFile[0][D].word & (1<<regFile[RC][SC].word);
-        if (!tempWord.word)               //Zero
-            psw.bit[0].b1 = 1;
-        else
-            psw.bit[0].b1 = 0;
-        psw.bit[0].b2 = tempWord.bit[1].b7;     //negative
+        if (!tempWord.word) psw.bit[0].b1 = 1;  //zero
+        else psw.bit[0].b1 = 0;
     }
 
 }
@@ -175,18 +201,18 @@ void BIC(int RC, int WB, int SC, int D){
     if (WB){
         temp = 1<<regFile[RC][SC].bytes[0];
         regFile[0][D].bytes[0] = regFile[0][D].bytes[0] & ~(temp);
-        if (!regFile[0][D].bytes[0])               //Zero
-            psw.bit[0].b1 = 1;
-        else
-            psw.bit[0].b1 = 0;
+        if (!regFile[0][D].bytes[0]) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;
+        if(regFile[0][D].bit[0].b7) psw.bit[0].b2 = 1;
+        else psw.bit[0].b2 = 0;
     }
     else{
         temp = 1<<regFile[RC][SC].word;
         regFile[0][D].word = regFile[0][D].word & ~(temp);
-        if (!regFile[0][D].word)               //Zero
-            psw.bit[0].b1 = 1;
-        else
-            psw.bit[0].b1 = 0;
+        if (!regFile[0][D].word) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;
+        if(regFile[0][D].bit[1].b7) psw.bit[0].b2 = 1;
+        else psw.bit[0].b2 = 0;
     }
 }
 
@@ -195,17 +221,17 @@ void BIS(int RC, int WB, int SC, int D){
 
     if (WB){
         regFile[0][D].bytes[0] = regFile[0][D].bytes[0] | (1<<regFile[RC][SC].bytes[0]);
-        if (!regFile[0][D].bytes[0])               //Zero
-            psw.bit[0].b1 = 1;
-        else
-            psw.bit[0].b1 = 0;
+        if (!regFile[0][D].bytes[0]) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;
+        if(regFile[0][D].bit[0].b7) psw.bit[0].b2 = 1;
+        else psw.bit[0].b2 = 0;
     }
     else{
         regFile[0][D].word = regFile[0][D].word | (1<<regFile[RC][SC].word);
-        if (!regFile[0][D].word)               //Zero
-            psw.bit[0].b1 = 1;
-        else
-            psw.bit[0].b1 = 0;
+        if (!regFile[0][D].word) psw.bit[0].b1 = 1;
+        else psw.bit[0].b1 = 0;
+        if(regFile[0][D].bit[1].b7) psw.bit[0].b2 = 1;
+        else psw.bit[0].b2 = 0;
     }
 }
 
@@ -336,16 +362,4 @@ void CLRCC(int V, int SLP, int N, int Z, int C)
     if(N) psw.bit[0].b2 = 0;
     if(SLP) psw.bit[0].b3 = 0;
     if(V) psw.bit[0].b4 = 0;
-}
-
-void LD(){
-}
-
-void ST(){
-}
-
-void LDR(){
-}
-
-void STR(){
 }
