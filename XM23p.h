@@ -180,7 +180,7 @@ void d0();
 void e0();
 void e1();
 void ldStHandle(int flag);
-void ldrStrHandle(int flag, unsigned char byte);
+void ldrStrHandle(int flag, char byte);
 
 void ADD(int RC, int WB, int SC, int D, int carry);
 void SUB(int RC, int WB, int SC, int D, int carry, int flag);
