@@ -252,11 +252,29 @@ void e1()
                     regFile[0][oldIMBR.set4.S].word;
                 break;
         }
+        //applying post increments
+        if(!oldIMBR.set4.upperBit){
+            switch(oldIMBR.set4.index){
+                case 0:
+                    if(!oldIMBR.set4.PRPO){
+                    regFile[0][oldIMBR.set4.S].word += oldIMBR.set4.INC * (2 - oldIMBR.set4.WB);
+                    regFile[0][oldIMBR.set4.S].word -= oldIMBR.set4.DEC * (2 - oldIMBR.set4.WB);
+                    }
+                    break;
+                case 1:
+                    if(!oldIMBR.set4.PRPO){
+                    regFile[0][oldIMBR.set4.D].word += oldIMBR.set4.INC * (2 - oldIMBR.set4.WB);
+                    regFile[0][oldIMBR.set4.D].word -= oldIMBR.set4.DEC * (2 - oldIMBR.set4.WB);
+                    }
+                    break;
+            }
+        }
     }
 }
 
 //Handles setting up data pipeline registers
 //flag handles which instruction
+//performs pre increments
 void ldStHandle(int flag)
 {
     //used as a scaling factor to increment/decrement by bytes or words
@@ -264,26 +282,18 @@ void ldStHandle(int flag)
 
     switch(flag){
         case 0:
-            if(!ir.set4.PRPO){
+            if(ir.set4.PRPO){
                 regFile[0][ir.set4.S].word += ir.set4.INC * quanta;
                 regFile[0][ir.set4.S].word -= ir.set4.DEC * quanta;
             }
             dataRegisters[MAR].word = regFile[0][ir.set4.S].word;
-            if(ir.set4.PRPO){
-                regFile[0][ir.set4.S].word += ir.set4.INC * quanta;
-                regFile[0][ir.set4.S].word -= ir.set4.DEC * quanta;
-            }
             break;
         case 1:
-            if(!ir.set4.PRPO){
+            if(ir.set4.PRPO){
                 regFile[0][ir.set4.D].word += ir.set4.INC * quanta;
                 regFile[0][ir.set4.D].word -= ir.set4.DEC * quanta;
             }
             dataRegisters[MAR].word = regFile[0][ir.set4.D].word;
-            if(ir.set4.PRPO){
-                regFile[0][ir.set4.D].word += ir.set4.INC * quanta;
-                regFile[0][ir.set4.D].word -= ir.set4.DEC * quanta;
-            }
             break;
     }
     dataRegisters[CTRL].bytes[0] = ir.set4.index;
