@@ -33,7 +33,16 @@ char instructions[][numStructions] = {
             "LD",
             "ST",
             "LDR",
-            "STR"
+            "STR",
+            "BL",
+            "BEQ",
+            "BNE",
+            "BC",
+            "BNC",
+            "BN",
+            "BGE",
+            "BLT",
+            "BRA"
 };
 
 //Loop over instructions in memory
@@ -46,9 +55,14 @@ void decodeInstructions(){
 
     unsigned char tempByte;
 
-    while(iBuffer.value && regFile[0][7].word <= breakAddr)
+    while(regFile[0][7].word <= breakAddr)
     {
-        if(iBuffer.set1.opcode < GRP1)
+        if (iBuffer.set5.up3 == 0)
+        {
+            int offset = concatBRC(iBuffer);
+            printBranches(BL, offset);
+        }
+        else if(iBuffer.set1.opcode < GRP1)
             printInstruction(iBuffer.set01.index, iBuffer.set1.wb, 
                     iBuffer.set1.rc, iBuffer.set1.sc, iBuffer.set1.d, 1);
 
@@ -110,13 +124,13 @@ void printMoves(int index, unsigned char byte, int d)
 }
 
 //Performs byte concatenation necessary to not
-//introduce additional padding in instruction structure
+//introduce additional padding in mov instruction structure
 unsigned char concatByte(unsigned char b1, unsigned char b2)
 {
     return (b2 << 5 | b1);
 }
 
-
+//Handles printing of set/clr commands
 void printConCodes(int index, code strction)
 {
     printf("%04x: %-4s ", regFile[0][7].word, instructions[index]);
@@ -124,7 +138,7 @@ void printConCodes(int index, code strction)
     strction.set3.N, strction.set3.Z, strction.set3.C);    
 }
 
-
+//Handles offset concatenation for ld/str instructions
 char concatLdStr(code strction)
 {
     char tempByte = ((strction.set4.INC) | (strction.set4.DEC<<1) |
@@ -133,6 +147,7 @@ char concatLdStr(code strction)
     return tempByte;
 }
 
+//Handles debug printing of ld/str instructions
 void printLdStr(int flag, int index, code strction){
 
     printf("%04x: %-4s ", regFile[0][7].word, instructions[OFFSET4+flag*2+index]);
@@ -148,4 +163,21 @@ void printLdStr(int flag, int index, code strction){
     }
     printf(" SRC: R%i DST: R%i\n", 
         strction.set4.S, strction.set4.D);
+}
+
+//Handles debug printing of branch instructions
+void printBranches(int index, int offset){
+
+    printf("%04x: %-4s", regFile[0][7].word, instructions[index]);
+    printf("OFF: %04x\n", offset);
+
+}
+
+//Concatenate the offset for branch instructions
+int concatBRC(code strction){
+
+    int temp = strction.set5.off1 + (strction.set5.off2 << 8) 
+                + (strction.set5.low2 << 10);
+    if (!strction.set5.up3) temp += (strction.set5.off2 << 12);
+    return temp;
 }
