@@ -24,6 +24,7 @@
 #define READ 0
 #define write 1
 #define PC 7
+#define LR 5
 
 #define GRP1 0x48
 #define GRP2 0x4C
@@ -167,6 +168,7 @@ extern wordContent dataRegisters[DFILE];
 extern wordContent psw;
 extern unsigned int breakAddr;
 extern code ir;
+extern char bubble;
 
 FILE *openFile();
 void readRecords(FILE *inputFile);
@@ -225,3 +227,5 @@ void MOVLS(int D, unsigned char byte);
 void MOVH(int D, unsigned char byte);
 void SETCC(int V, int SLP, int N, int Z, int C);
 void CLRCC(int V, int SLP, int N, int Z, int C);
+void linkBranch(code strction, short offset);
+void Branch(code strction, short offset);

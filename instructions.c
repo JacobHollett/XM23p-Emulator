@@ -363,3 +363,53 @@ void CLRCC(int V, int SLP, int N, int Z, int C)
     if(SLP) psw.bit[0].b3 = 0;
     if(V) psw.bit[0].b4 = 0;
 }
+
+
+void linkBranch(code strction, short offset){
+    //subtract two since f0 will have bumped up the PC
+    regFile[0][LR].word = regFile[0][PC].word - 2;
+    regFile[0][PC].word += offset;
+    bubble = 1;
+}
+
+//handles each branch instruction aside from branch with link
+void Branch(code strction, short offset){
+
+    //indicated branch success
+    char success = 0;
+
+    switch(strction.set5.low3){
+        case 0:
+            if(psw.bit[0].b1) success = 1;
+            break;
+        case 1:
+            if(!psw.bit[0].b1) success = 1;
+            break;
+        case 2:
+            if(psw.bit[0].b0) success = 1;
+            break;
+        case 3:
+            if(!psw.bit[0].b0) success = 1;
+            break;
+        case 4:
+            if(psw.bit[0].b2) success = 1;
+            break;
+        case 5:
+            if(psw.bit[0].b2 ^ (!psw.bit[0].b4))
+                success = 1;
+            break;
+        case 6:
+            if(psw.bit[0].b2 ^ psw.bit[0].b4)
+                success = 1;
+            break;
+        case 7:
+            success = 1;
+            break;
+    }
+
+    if (success)
+    {
+        regFile[0][PC].word += offset;
+        bubble = 1;
+    }
+}

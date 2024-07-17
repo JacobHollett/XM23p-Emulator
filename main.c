@@ -11,7 +11,9 @@ char sourceFileName[MAXRECORDLENG]; //reusing MAXRECORDLENG here
 //contains registers 0-7 and constants 
 wordContent regFile[REGCON][REGFILE] = {{{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
                                         {{0}, {1}, {2}, {4}, {8}, {16}, {32}, {-1}}};
-//Program Status Word
+/*Program status word
+ * C Z N SLP V 
+*/
 wordContent psw;
 //IMAR, ICTRL, IMDR
 wordContent instructionRegisters[IFILE];

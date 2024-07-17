@@ -4,16 +4,19 @@
 
 #include "XM23p.h"
 
-//Set by decode, used by execute
-//to distinguish between arithmetic
-//moves and load/stores
-unsigned char movFlag;
-
-//copy of last movFlag used for printing
-unsigned char oldMovFlag;
-
 //copy of IMBR used for printing
 code oldIMBR;
+
+//Set by D0, used by E0 to determine
+//which instruction to execute
+//corresponds to instruction table in decodeFuncs.c
+unsigned char INindex;
+
+//copy of old instruction index
+unsigned char oldIndex;
+
+//used to flush the pipeline during branching
+char bubble;
 
 //Main execution loop calling execution stages
 void execute(){
@@ -32,7 +35,7 @@ void execute(){
             if(debugFlag){
                 printf("       F0: %04x", instructionRegisters[MAR].word);
                 printf("     D0: %04x", instructionRegisters[MBR].word);
-                if(oldMovFlag> 1) printf("    E1: %04x", oldIMBR.value);
+                if(oldIndex >= 25) printf("    E1: %04x", oldIMBR.value);
                 printf("\n");
             }
         }
@@ -74,42 +77,38 @@ void f1(){
 //Sets flag to identify move instructions
 void d0(){
 
-    oldMovFlag = movFlag;
+    oldIndex = INindex;
+
+    if(ir.set5.up3 == 0)
+        INindex = BL;
     
-    if(ir.set1.opcode == 0){
-        ir.set01.upopcode = 8;
-        movFlag = 1;
-    }
-    else if(ir.set1.opcode < GRP1){
-        ir.set1.opcode = ir.set01.index;
-        movFlag = 0;
-    }
-    else if(ir.set1.opcode < GRP2){
-        ir.set1.opcode = ir.set01.index+OFFSET1;
-        movFlag = 0;
-    }
-    else if(ir.set1.opcode == GRP2){
-        ir.set1.opcode = ir.set01.rc+MOVGRP;
-        movFlag = 0;
-    }
-    else if(ir.set1.opcode == GRP3 && ir.set1.rc == 0){
-        ir.set1.opcode = ir.set01.rc+MOVGRP;
-        movFlag = 0;
-    }
-    else if(ir.set1.opcode == GRP3 && ir.set1.rc == 1){
-        ir.set1.opcode = ir.set01.wb+OFFSET2;
-        movFlag = 0;
-    }
-    else if(ir.set4.code == 3 && ir.set4.upperBit == 0){
-        movFlag = 2;
-    }
-    else if(ir.set4.upperBit == 1){
-        movFlag = 3; 
-    }
-    else if(ir.set01.upopcode >= MOVGRP){
-        ir.set01.upopcode+=OFFSET3;
-        movFlag = 1;
-    }
+    else if(ir.set5.up3 == 1)
+        INindex = BL+1;
+    
+    else if(ir.set1.opcode < GRP1)
+        INindex = ir.set01.index;
+
+    else if(ir.set1.opcode < GRP2)
+        INindex = ir.set01.index+OFFSET1;
+
+    else if(ir.set1.opcode == GRP2)
+        INindex = ir.set01.rc+MOVGRP;
+    
+    else if(ir.set1.opcode == GRP3 && ir.set1.rc == 0)
+        INindex = ir.set01.rc+MOVGRP;
+    
+    else if(ir.set1.opcode == GRP3 && ir.set1.rc == 1)
+        INindex = ir.set01.wb+OFFSET2;
+    
+    else if(ir.set4.code == 3 && ir.set4.upperBit == 0)
+        INindex = 25;
+    
+    else if(ir.set4.upperBit == 1)
+        INindex = 26;
+    
+    else if(ir.set01.upopcode >= MOVGRP)
+        INindex = ir.set01.upopcode + OFFSET3;
+    
     else
         printf("%04x: %04x Invalid command\n", regFile[0][PC].word, ir.set1.opcode);
 }
@@ -119,34 +118,10 @@ void d0(){
 //for ld/str sets data registers
 void e0(){
 
-    unsigned char tempIndex;
     unsigned char tempByte;
+    short offset;
     
-    switch (movFlag)
-    {
-        case 0:
-            tempIndex = ir.set1.opcode;
-            break;
-        case 1:
-            tempIndex = ir.set01.upopcode;
-            break;
-        //ld/st cases
-        case 2:
-            tempIndex = 25;
-            ldStHandle(ir.set4.index);
-            break;
-        //ldr/str
-        case 3:
-            tempIndex = 25;
-            tempByte = concatLdStr(ir);
-            ldrStrHandle(ir.set4.index2, tempByte);
-            break;
-        default:
-            tempIndex = ir.set1.opcode;
-            break;
-    }
-
-    switch (tempIndex)
+    switch (INindex)
     {
     case 0:
         ADD(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d, 0);
@@ -224,6 +199,21 @@ void e0(){
     case 24:
         CLRCC(ir.set3.V, ir.set3.SLP, ir.set3.N, ir.set3.Z, ir.set3.C);
         break;
+    case 25:
+        ldStHandle(ir.set4.index);
+        break;
+    case 26:
+        tempByte = concatLdStr(ir);
+        ldrStrHandle(ir.set4.index2, tempByte);
+        break;
+    case BL:
+        offset = concatBRC(ir);
+        linkBranch(ir, offset);
+        break;
+    case BL+1:
+        offset = concatBRC(ir);
+        Branch(ir, offset);
+        break;
     default:
         break;
     }
@@ -233,7 +223,7 @@ void e0(){
 //Doesn't pass off to other functions like e0
 void e1()
 {
-    if(movFlag > 1){
+    if(INindex >= 25){
         switch(dataRegisters[CTRL].bytes[0]){
             case 0:
                 if(!dataRegisters[CTRL].bytes[1])
