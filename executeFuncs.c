@@ -35,7 +35,7 @@ void execute(){
             if(debugFlag){
                 printf("       F0: %04x", instructionRegisters[MAR].word);
                 printf("     D0: %04x", instructionRegisters[MBR].word);
-                if(oldIndex >= 25) printf("    E1: %04x", oldIMBR.value);
+                if(oldIndex == 25 || oldIndex == 26) printf("    E1: %04x", oldIMBR.value);
                 printf("\n");
             }
         }
@@ -68,7 +68,9 @@ void f1(){
     oldIMBR.value = instructionRegisters[MBR].word;
     instructionRegisters[MBR].word = 
         memBlock[instruction].words[instructionRegisters[MAR].word/2];
-    ir.value = instructionRegisters[MBR].word;
+    if(!bubble)
+        ir.value = instructionRegisters[MBR].word;
+    else bubble = 0;
 }
 
 //decode stage copies contents of IR to
@@ -78,8 +80,6 @@ void f1(){
 void d0(){
     
     oldIndex = INindex;
-
-    if(!bubble){
 
     if(ir.set5.up3 == 0)
         INindex = BL;
@@ -113,7 +113,7 @@ void d0(){
     
     else
         printf("%04x: %04x Invalid command\n", regFile[0][PC].word, ir.set1.opcode);
-    }
+    
 }
 
 //takes decoded instruction
@@ -123,8 +123,6 @@ void e0(){
 
     unsigned char tempByte;
     short offset;
-    
-    if(!bubble){
 
     switch (INindex)
     {
@@ -205,6 +203,7 @@ void e0(){
         CLRCC(ir.set3.V, ir.set3.SLP, ir.set3.N, ir.set3.Z, ir.set3.C);
         break;
     case 25:
+        printf("ld/st\n");
         ldStHandle(ir.set4.index);
         break;
     case 26:
@@ -222,15 +221,13 @@ void e0(){
     default:
         break;
     }
-    }
-    else bubble = 0;
 }
 
 //Second execution step used for ld/st
 //Doesn't pass off to other functions like e0
 void e1()
 {
-    if(INindex >= 25){
+    if(INindex == 25 || INindex == 26){
         switch(dataRegisters[CTRL].bytes[0]){
             case 0:
                 if(!dataRegisters[CTRL].bytes[1])

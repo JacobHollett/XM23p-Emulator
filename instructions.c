@@ -369,6 +369,8 @@ void linkBranch(code strction, short offset){
     //subtract two since f0 will have bumped up the PC
     regFile[0][LR].word = regFile[0][PC].word - 2;
     regFile[0][PC].word += offset;
+    //insert NOP into the ir and skip the next decode phase
+    ir.value = NOP;
     bubble = 1;
 }
 
@@ -411,5 +413,6 @@ void Branch(code strction, short offset){
     {
         regFile[0][PC].word += offset;
         bubble = 1;
+        ir.value = NOP;
     }
 }
