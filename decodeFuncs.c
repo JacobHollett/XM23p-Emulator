@@ -54,13 +54,17 @@ void decodeInstructions(){
     iBuffer.value = memBlock[instruction].words[regFile[0][PC].word/2];
 
     unsigned char tempByte;
+    short offset;
 
     while(regFile[0][PC].word <= breakAddr)
     {
         if (iBuffer.set5.up3 == 0)
         {
-            int offset = concatBRC(iBuffer);
+            offset = concatBRC(iBuffer);
             printBranches(BL, offset);
+        }else if(iBuffer.set5.up3 == 1){
+            offset = concatBRC(iBuffer);
+            printBranches(BL+iBuffer.set5.low3+1, offset);
         }
         else if(iBuffer.set1.opcode < GRP1)
             printInstruction(iBuffer.set01.index, iBuffer.set1.wb, 
@@ -166,9 +170,9 @@ void printLdStr(int flag, int index, code strction){
 }
 
 //Handles debug printing of branch instructions
-void printBranches(int index, int offset){
+void printBranches(int index, short offset){
 
-    printf("%04x: %-4s", regFile[0][PC].word, instructions[index]);
+    printf("%04x: %-5s", regFile[0][PC].word, instructions[index]);
     printf("OFF: %04x\n", offset);
 
 }
