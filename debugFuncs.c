@@ -93,3 +93,15 @@ void displayPSW(){
          psw.bit[0].b4, psw.bit[0].b3, psw.bit[0].b2, 
           psw.bit[0].b1, psw.bit[0].b0);
 }
+
+
+void sigint_hdlr()
+{
+/*
+- Invoked when SIGINT (control-C) is detected
+- changes state of ctrl_c_fnd
+- signal must be reinitialized
+*/
+ctrl_c_fnd = TRUE;
+signal(SIGINT, sigint_hdlr); /* Reinitialize SIGINT */
+}

@@ -20,8 +20,8 @@ char bubble;
 
 //Main execution loop calling execution stages
 void execute(){
-
-    while(regFile[0][PC].word <= breakAddr || ((clock+2)%2)){
+    ctrl_c_fnd = FALSE;
+    while(regFile[0][PC].word != breakAddr && !ctrl_c_fnd){
         if(debugFlag) printf(" %03i", clock);
         if (!((clock+2) % 2))
         {
@@ -130,6 +130,7 @@ void e0(){
         ADD(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d, 0);
         break;
     case 1:
+        printf("ADD\n");
         ADD(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d, psw.bit[0].b0);
         break;
     case 2:

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <signal.h>
 
 #define MEMSIZE (1<<16)
 #define data 1              //DMEM index
@@ -26,6 +27,8 @@
 #define PC 7
 #define LR 5
 #define NOP 0x4C00
+#define TRUE 1
+#define FALSE 0
 
 #define GRP1 0x48
 #define GRP2 0x4C
@@ -170,6 +173,8 @@ extern wordContent psw;
 extern unsigned int breakAddr;
 extern code ir;
 extern char bubble;
+extern volatile sig_atomic_t ctrl_c_fnd; /* T|F - indicates whether ^C detected */
+
 
 FILE *openFile();
 void readRecords(FILE *inputFile);
@@ -196,6 +201,7 @@ void changeRegister();
 void changeMEM();
 void setBreak();
 void displayPSW();
+void sigint_hdlr();
 
 void execute();
 void f0();

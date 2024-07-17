@@ -25,11 +25,17 @@ code ir;
 unsigned int breakAddr;
 //debug mode
 unsigned char debugFlag;
+//CTRL C flag
+volatile sig_atomic_t ctrl_c_fnd;
 
 //Main control loop only responsible
 //for calling other functions
 int main(int argc, char *argv[])
 {
+    //intialize ^C handler
+    ctrl_c_fnd = FALSE;
+    signal(SIGINT, sigint_hdlr);
+
     //XME File to open
     FILE *xmeFile;
     int stepExecuteFlag = 0;
@@ -73,6 +79,7 @@ int main(int argc, char *argv[])
                     printf("Clock   PC      Instruction     Fetch       Decode      Execute\n");
                 execute();
                 getchar();
+                printf("Clock: %06d Instruction: %04x", clock, ir.value);
                 break;
             case 's':
                 displayPSW();
