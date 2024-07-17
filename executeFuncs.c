@@ -76,8 +76,10 @@ void f1(){
 //its opcode to an index
 //Sets flag to identify move instructions
 void d0(){
-
+    
     oldIndex = INindex;
+
+    if(!bubble){
 
     if(ir.set5.up3 == 0)
         INindex = BL;
@@ -111,6 +113,7 @@ void d0(){
     
     else
         printf("%04x: %04x Invalid command\n", regFile[0][PC].word, ir.set1.opcode);
+    }
 }
 
 //takes decoded instruction
@@ -121,6 +124,8 @@ void e0(){
     unsigned char tempByte;
     short offset;
     
+    if(!bubble){
+
     switch (INindex)
     {
     case 0:
@@ -217,6 +222,8 @@ void e0(){
     default:
         break;
     }
+    }
+    else bubble = 0;
 }
 
 //Second execution step used for ld/st
