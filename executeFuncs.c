@@ -18,13 +18,13 @@ code oldIMBR;
 //Main execution loop calling execution stages
 void execute(){
 
-    while(regFile[0][7].word <= breakAddr || ((clock+2)%2)){
+    while(regFile[0][PC].word <= breakAddr || ((clock+2)%2)){
         if(debugFlag) printf(" %03i", clock);
         if (!((clock+2) % 2))
         {
             if(debugFlag){
-                printf("   %04x",  regFile[0][7].word);
-                printf("        %04x", memBlock[instruction].words[regFile[0][7].word/2]);
+                printf("   %04x",  regFile[0][PC].word);
+                printf("        %04x", memBlock[instruction].words[regFile[0][PC].word/2]);
             }
             e1();
             f0();
@@ -54,9 +54,9 @@ void execute(){
 }
 
 void f0(){
-    instructionRegisters[MAR].word = regFile[0][7].word;
+    instructionRegisters[MAR].word = regFile[0][PC].word;
     instructionRegisters[CTRL].word = READ;
-    regFile[0][7].word+=2;
+    regFile[0][PC].word+=2;
 }
 
 //Hold old IMBR, fetch new one and make a
@@ -111,7 +111,7 @@ void d0(){
         movFlag = 1;
     }
     else
-        printf("%04x: %04x Invalid command\n", regFile[0][7].word, ir.set1.opcode);
+        printf("%04x: %04x Invalid command\n", regFile[0][PC].word, ir.set1.opcode);
 }
 
 //takes decoded instruction

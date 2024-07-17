@@ -258,13 +258,13 @@ void SRA(int WB, int D){
         regFile[0][D].bytes[0] = regFile[0][D].bytes[0]>>1;
         if(!regFile[0][D].bytes[0]) psw.bit[0].b1 = 1;
         else psw.bit[0].b1 = 0;                     //zero
-        psw.bit[0].b2 = regFile[0][7].bit[0].b7;    //neg
+        psw.bit[0].b2 = regFile[0][D].bit[0].b7;    //neg
     }
     else{
         regFile[0][D].word = regFile[0][D].word>>1;
         if(!regFile[0][D].word) psw.bit[0].b1 = 1;
         else psw.bit[0].b1 = 0;                     //zero
-        psw.bit[0].b2 = regFile[0][7].bit[1].b7;    //neg
+        psw.bit[0].b2 = regFile[0][D].bit[1].b7;    //neg
     }
 }
 
@@ -279,14 +279,14 @@ void RRC(int WB, int D){
         regFile[0][D].bit[0].b7 = tempCarry.bit[0].b0;
         if(!regFile[0][D].bytes[0]) psw.bit[0].b1 = 1;
         else psw.bit[0].b1 = 0;                     //zero
-        psw.bit[0].b2 = regFile[0][7].bit[0].b7;    //neg
+        psw.bit[0].b2 = regFile[0][D].bit[0].b7;    //neg
     }
     else{
         regFile[0][D].word = regFile[0][D].word>>1;
         regFile[0][D].bit[1].b7 = tempCarry.bit[0].b0;
         if(!regFile[0][D].word) psw.bit[0].b1 = 1;
         else psw.bit[0].b1 = 0;                     //zero
-        psw.bit[0].b2 = regFile[0][7].bit[1].b7;    //neg
+        psw.bit[0].b2 = regFile[0][D].bit[1].b7;    //neg
     }
 }
 

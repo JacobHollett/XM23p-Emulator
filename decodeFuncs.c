@@ -51,11 +51,11 @@ void decodeInstructions(){
 
     //Store the first instruction in a buffer
     code iBuffer;
-    iBuffer.value = memBlock[instruction].words[regFile[0][7].word/2];
+    iBuffer.value = memBlock[instruction].words[regFile[0][PC].word/2];
 
     unsigned char tempByte;
 
-    while(regFile[0][7].word <= breakAddr)
+    while(regFile[0][PC].word <= breakAddr)
     {
         if (iBuffer.set5.up3 == 0)
         {
@@ -92,10 +92,10 @@ void decodeInstructions(){
             printMoves(iBuffer.set01.upopcode + OFFSET3, tempByte, iBuffer.set2.d);
         }
         else
-            printf("%04x: %04x\n", regFile[0][7].word/2, iBuffer.set1.opcode);
+            printf("%04x: %04x\n", regFile[0][PC].word/2, iBuffer.set1.opcode);
 
-        regFile[0][7].word+=2;
-        iBuffer.value = memBlock[instruction].words[regFile[0][7].word/2];
+        regFile[0][PC].word+=2;
+        iBuffer.value = memBlock[instruction].words[regFile[0][PC].word/2];
     }
 }
 
@@ -103,7 +103,7 @@ void decodeInstructions(){
 //prints decoded instruction to screen
 void printInstruction(int index, int wb, int rc, int src, int d, int flag)
 {
-    printf("%04x: %-4s ", regFile[0][7].word, instructions[index]);
+    printf("%04x: %-4s ", regFile[0][PC].word, instructions[index]);
     printf("RC: %i WB: %i ", rc, wb);
     if ((!rc || flag == 3) && flag != 4)
         printf("SRC: R%-2i", src);
@@ -117,7 +117,7 @@ void printInstruction(int index, int wb, int rc, int src, int d, int flag)
 //similar in function to printInstructions
 void printMoves(int index, unsigned char byte, int d)
 {
-    printf("%04x: %-5s ", regFile[0][7].word, instructions[index]);
+    printf("%04x: %-5s ", regFile[0][PC].word, instructions[index]);
     printf("           ");
     printf("BYT: %02x DST: R%i\n", byte, d);
 
@@ -133,7 +133,7 @@ unsigned char concatByte(unsigned char b1, unsigned char b2)
 //Handles printing of set/clr commands
 void printConCodes(int index, code strction)
 {
-    printf("%04x: %-4s ", regFile[0][7].word, instructions[index]);
+    printf("%04x: %-4s ", regFile[0][PC].word, instructions[index]);
     printf("BITS: %i%i%i%i%i \n", strction.set3.V, strction.set3.SLP, 
     strction.set3.N, strction.set3.Z, strction.set3.C);    
 }
@@ -150,7 +150,7 @@ char concatLdStr(code strction)
 //Handles debug printing of ld/str instructions
 void printLdStr(int flag, int index, code strction){
 
-    printf("%04x: %-4s ", regFile[0][7].word, instructions[OFFSET4+flag*2+index]);
+    printf("%04x: %-4s ", regFile[0][PC].word, instructions[OFFSET4+flag*2+index]);
 
     switch(flag){
         case 0:
@@ -168,7 +168,7 @@ void printLdStr(int flag, int index, code strction){
 //Handles debug printing of branch instructions
 void printBranches(int index, int offset){
 
-    printf("%04x: %-4s", regFile[0][7].word, instructions[index]);
+    printf("%04x: %-4s", regFile[0][PC].word, instructions[index]);
     printf("OFF: %04x\n", offset);
 
 }

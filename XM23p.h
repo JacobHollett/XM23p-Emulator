@@ -23,6 +23,7 @@
 #define CTRL 2
 #define READ 0
 #define write 1
+#define PC 7
 
 #define GRP1 0x48
 #define GRP2 0x4C

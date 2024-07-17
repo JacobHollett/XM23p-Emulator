@@ -223,7 +223,7 @@ void parseS9(char **recordPtr)
     checkSum += hexToByte(a, b);
 
     if(checkSum == CHECKSUM){
-        regFile[0][7].word = address;
+        regFile[0][PC].word = address;
         printf("Starting address is 0x%04x\n", address);
     }
     else
