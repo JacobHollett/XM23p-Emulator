@@ -118,8 +118,7 @@ typedef struct branchGrp
 {
     unsigned char off1;
     unsigned char off2:2;
-    unsigned char low2:2;
-    unsigned char low1:1;
+    unsigned char low3:3;
     unsigned char up3:3;
 } branchGrp;
 
@@ -185,7 +184,7 @@ void printBranches(int index, int offset);
 void printLdStr(int flag, int index, code strction);
 unsigned char concatByte(unsigned char b1, unsigned char b2);
 char concatLdStr(code strction);
-int concatBRC(code strction);
+short concatBRC(code strction);
 
 void printHeader();
 void displayRegisters();

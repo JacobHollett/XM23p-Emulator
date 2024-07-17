@@ -143,7 +143,7 @@ char concatLdStr(code strction)
 {
     char tempByte = ((strction.set4.INC) | (strction.set4.DEC<<1) |
      (strction.set4.PRPO<<2) | (strction.set4.index<<3) | (strction.set4.code<<4));
-    if(tempByte >= 0x40) tempByte = (tempByte | 0x80);
+    if(tempByte >= 0x40) tempByte = (tempByte | 0x80); //sign extending based on upper bit
     return tempByte;
 }
 
@@ -174,10 +174,17 @@ void printBranches(int index, int offset){
 }
 
 //Concatenate the offset for branch instructions
-int concatBRC(code strction){
+short concatBRC(code strction){
 
-    int temp = strction.set5.off1 + (strction.set5.off2 << 8) 
-                + (strction.set5.low2 << 10);
-    if (!strction.set5.up3) temp += (strction.set5.off2 << 12);
-    return temp;
+    wordContent temp;
+    temp.word = strction.set5.off1 + (strction.set5.off2 << 8);
+    if (!strction.set5.up3){
+        temp.word += (strction.set5.off2 << 10);
+        //Sign extending for BL
+        if(temp.bit[1].b4) temp.word = (temp.word | 0xE000);
+    } else if(temp.bit[1].b1) temp.word = (temp.word | 0xFC00);
+    //The above sign extends for each other instruction
+    temp.word = (temp.word<<1);
+    
+    return temp.word;
 }
