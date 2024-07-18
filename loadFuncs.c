@@ -297,10 +297,11 @@ void displayMem()
 //Initializes null characters in pipeline registers
 void initializePipelines()
 {
-    instructionRegisters[MAR].word = 0x4c00;
-    instructionRegisters[CTRL].word = 0x4c00;
-    instructionRegisters[MBR].word = 0x4c00;
-    dataRegisters[MAR].word = 0x4c00;
-    dataRegisters[CTRL].word = 0x4c00;
-    dataRegisters[MBR].word = 0x400;
+    instructionRegisters[MAR].word = NOP;
+    instructionRegisters[CTRL].word = NOP;
+    instructionRegisters[MBR].word = NOP;
+    dataRegisters[MAR].word = NOP;
+    dataRegisters[CTRL].word = NOP;
+    dataRegisters[MBR].word = NOP;
+    ir.value = NOP;
 }

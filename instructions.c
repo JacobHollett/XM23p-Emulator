@@ -368,7 +368,7 @@ void CLRCC(int V, int SLP, int N, int Z, int C)
 void linkBranch(code strction, short offset){
     //subtract two since f0 will have bumped up the PC
     regFile[0][LR].word = regFile[0][PC].word - 2;
-    regFile[0][PC].word += offset;
+    regFile[0][PC].word += (offset-2);
     //insert NOP into the ir and skip the next decode phase
     ir.value = NOP;
     bubble = 1;
@@ -411,7 +411,9 @@ void Branch(code strction, short offset){
 
     if (success)
     {
-        regFile[0][PC].word += offset;
+        //again accounting for the fact we've already bumped
+        //the PC forward
+        regFile[0][PC].word += (offset-2);
         bubble = 1;
         ir.value = NOP;
     }

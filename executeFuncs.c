@@ -204,7 +204,6 @@ void e0(){
         CLRCC(ir.set3.V, ir.set3.SLP, ir.set3.N, ir.set3.Z, ir.set3.C);
         break;
     case 25:
-        printf("ld/st\n");
         ldStHandle(ir.set4.index);
         break;
     case 26:

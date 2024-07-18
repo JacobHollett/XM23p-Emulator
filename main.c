@@ -79,7 +79,8 @@ int main(int argc, char *argv[])
                     printf("Clock   PC      Instruction     Fetch       Decode      Execute\n");
                 execute();
                 getchar();
-                printf("Clock: %06d Instruction: %04x", clock, ir.value);
+                printf("Clock: %06d PC: %04x    Instruction: %04x",
+                 clock, regFile[0][PC].word, ir.value);
                 break;
             case 's':
                 displayPSW();
