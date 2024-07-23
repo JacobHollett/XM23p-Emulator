@@ -183,12 +183,11 @@ short concatBRC(code strction){
     wordContent temp;
     temp.word = strction.set5.off1 + (strction.set5.off2 << 8);
     if (!strction.set5.up3){
-        temp.word += (strction.set5.off2 << 10);
+        temp.word += (strction.set5.low3 << 10);
         //Sign extending for BL
         if(temp.bit[1].b4) temp.word = (temp.word | 0xE000);
     } else if(temp.bit[1].b1) temp.word = (temp.word | 0xFC00);
     //The above sign extends for each other instruction
     temp.word = (temp.word<<1);
-    
     return temp.word;
 }
