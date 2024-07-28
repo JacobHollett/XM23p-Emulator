@@ -1,7 +1,11 @@
 /*XM23p Loader main loop*/
-/*ECED 3403   JH 2024   */
+/*ECED 3403  JH 07 2024 */
 
 #include "XM23p.h"
+#include "load.h"
+#include "decode.h"
+#include "debug.h"
+#include "execute.h"
 
 // Arrays representing data and instruction memory
 memory memBlock[2];
@@ -15,12 +19,6 @@ wordContent regFile[REGCON][REGFILE] = {{{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}}
  * C Z N SLP V 
 */
 wordContent psw;
-//IMAR, ICTRL, IMDR
-wordContent instructionRegisters[IFILE];
-//DMAR, DCTRL, DMBR
-wordContent dataRegisters[DFILE];
-//IR
-code ir;
 //Breakpoint address
 unsigned int breakAddr;
 //debug mode

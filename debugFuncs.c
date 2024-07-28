@@ -1,7 +1,8 @@
 /*XM23p Loader function definitions*/
-/*ECED 3403              JH 2024   */
+/*ECED 3403            JH 07 2024  */
 
 #include "XM23p.h"
+#include "debug.h"
 
 void printHeader(){
 
@@ -94,7 +95,7 @@ void displayPSW(){
           psw.bit[0].b1, psw.bit[0].b0);
 }
 
-
+/*Provided by Prof. Hughes 07 2024*/
 void sigint_hdlr()
 {
 /*

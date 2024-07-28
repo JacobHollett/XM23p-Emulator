@@ -1,7 +1,9 @@
 /*XM23p Loader function definitions*/
-/*ECED 3403              JH 2024   */
+/*ECED 3403           JH 07 2024   */
 
 #include "XM23p.h"
+#include "load.h"
+#include "execute.h"
 
 //handles opening xme files
 FILE *openFile(){

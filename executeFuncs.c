@@ -1,9 +1,17 @@
 /*XM23p emulator fetch, decode and */
 /*  execution definitions          */
-/*ECED 3403              JH 2024   */
+/*ECED 3403           JH 07 2024   */
 
 #include "XM23p.h"
+#include "execute.h"
+#include "decode.h"
 
+//IMAR, ICTRL, IMDR
+wordContent instructionRegisters[IFILE];
+//DMAR, DCTRL, DMBR
+wordContent dataRegisters[DFILE];
+//Instruction Register
+code ir;
 //copy of IMBR used for printing
 code oldIMBR;
 

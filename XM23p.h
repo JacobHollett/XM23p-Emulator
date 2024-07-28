@@ -1,8 +1,10 @@
-/*XM23p Loader header file      */
-/*Contains definitions,includes */
-/*and function prototypes       */
-/*ECED 3403   JH 2024           */
+/*XM23p header file           */
+/*Contains general definitions*/
+/*& code structures           */
+/*ECED 3403   JH 07 2024      */
 #pragma once
+#ifndef MAINHEADER
+#define MAINHEADER
 
 #include <stdio.h>
 #include <ctype.h>
@@ -171,68 +173,6 @@ extern wordContent instructionRegisters[IFILE];
 extern wordContent dataRegisters[DFILE];
 extern wordContent psw;
 extern unsigned int breakAddr;
-extern code ir;
-extern char bubble;
 extern volatile sig_atomic_t ctrl_c_fnd; /* T|F - indicates whether ^C detected */
 
-
-FILE *openFile();
-void readRecords(FILE *inputFile);
-void parseS0(char **recordPtr);
-void parseS12(char **recordPtr, int flag);
-void parseS9(char **recordPtr);
-unsigned char hexToByte(unsigned char char1, unsigned char char2);
-void displayMem();
-void initializePipelines();
-
-void decodeInstructions();
-void printInstruction(int index, int wb, int rc, int src, int d, int flag);
-void printMoves(int index, unsigned char byte, int d);
-void printConCodes(int index, code strction);
-void printBranches(int index, short offset);
-void printLdStr(int flag, int index, code strction);
-unsigned char concatByte(unsigned char b1, unsigned char b2);
-char concatLdStr(code strction);
-short concatBRC(code strction);
-
-void printHeader();
-void displayRegisters();
-void changeRegister();
-void changeMEM();
-void setBreak();
-void displayPSW();
-void sigint_hdlr();
-
-void execute();
-void f0();
-void f1();
-void d0();
-void e0();
-void e1();
-void ldStHandle(int flag);
-void ldrStrHandle(int flag, char byte);
-
-void ADD(int RC, int WB, int SC, int D, int carry);
-void SUB(int RC, int WB, int SC, int D, int carry, int flag);
-void DADD(int RC, int WB, int SC, int D);
-void CMP(int RC, int WB, int SC, int D);
-void XOR(int RC, int WB, int SC, int D);
-void AND(int RC, int WB, int SC, int D);
-void OR(int RC, int WB, int SC, int D);
-void BIT(int RC, int WB, int SC, int D);
-void BIC(int RC, int WB, int SC, int D);
-void BIS(int RC, int WB, int SC, int D);
-void MOV(int WB, int SC, int D);
-void SWAP(int SC, int D);
-void SRA(int WB, int D);
-void RRC(int WB, int D);
-void SWPB(int D);
-void SXT(int D);
-void MOVL(int D, unsigned char byte);
-void MOVLZ(int D, unsigned char byte);
-void MOVLS(int D, unsigned char byte);
-void MOVH(int D, unsigned char byte);
-void SETCC(int V, int SLP, int N, int Z, int C);
-void CLRCC(int V, int SLP, int N, int Z, int C);
-void linkBranch(code strction, short offset);
-void Branch(code strction, short offset);
+#endif

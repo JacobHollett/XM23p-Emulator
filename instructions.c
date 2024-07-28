@@ -1,7 +1,8 @@
 /*XM23p instruction definitions    */
-/*ECED 3403              JH 2024   */
+/*ECED 3403           JH 07 2024   */
 
 #include "XM23p.h"
+#include "execute.h"
 
 unsigned char overflowTable[2][2][2] = {{{0,1},{0,0}},
                                         {{0,0},{1,0}}};
