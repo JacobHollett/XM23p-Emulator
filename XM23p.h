@@ -20,7 +20,7 @@
 #define REGCON 2
 #define IFILE 3
 #define DFILE 3
-#define numStructions 23
+#define maxInstruction 10
 #define MAR 0
 #define MBR 1
 #define CTRL 2
@@ -41,6 +41,7 @@
 #define OFFSET3 0x7
 #define OFFSET4 0x19
 #define BL 29
+#define CEX 38
 
 /*
  * XM23p Memory byte/word representation

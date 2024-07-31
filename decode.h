@@ -13,6 +13,7 @@ void printMoves(int index, unsigned char byte, int d);
 void printConCodes(int index, code strction);
 void printBranches(int index, short offset);
 void printLdStr(int flag, int index, code strction);
+void printCEX(code strction);
 unsigned char concatByte(unsigned char b1, unsigned char b2);
 char concatLdStr(code strction);
 short concatBRC(code strction);

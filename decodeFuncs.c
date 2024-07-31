@@ -4,7 +4,7 @@
 #include "XM23p.h"
 #include "decode.h"
 
-char instructions[][numStructions] = {
+char instructions[][maxInstruction] = {
 
             "ADD",
             "ADDC",
@@ -43,11 +43,13 @@ char instructions[][numStructions] = {
             "BN",
             "BGE",
             "BLT",
-            "BRA"
+            "BRA",
+            "CEX"
 };
 
 //Loop over instructions in memory
 //using various structures to decode them
+//Checks in order given by XM23p instruction sheet
 void decodeInstructions(){
 
     //Store the first instruction in a buffer
@@ -85,6 +87,9 @@ void decodeInstructions(){
 
         else if(iBuffer.set1.opcode == GRP3 && iBuffer.set1.rc == 1)
             printConCodes(iBuffer.set1.wb+OFFSET2, iBuffer);
+        
+        else if(iBuffer.set4.code == 2 && iBuffer.set4.upperBit == 0)
+            printCEX(iBuffer);
     
         else if(iBuffer.set4.code == 3 && iBuffer.set4.upperBit == 0)
             printLdStr(iBuffer.set4.upperBit, iBuffer.set4.index, iBuffer);
@@ -174,7 +179,7 @@ void printLdStr(int flag, int index, code strction){
 void printBranches(int index, short offset){
 
     printf("%04x: %-5s", regFile[0][PC].word, instructions[index]);
-    printf("OFF: %04x\n", offset);
+    printf("OFF:  %04x\n", offset);
 
 }
 
@@ -191,4 +196,16 @@ short concatBRC(code strction){
     //The above sign extends for each other instruction
     temp.word = (temp.word<<1);
     return temp.word;
+}
+
+
+void printCEX(code strction){
+
+    int c = (strction.set4.PRPO<<3) + (strction.set4.DEC<<2) +
+            (strction.set4.INC<<1) + (strction.set4.WB);
+
+    printf("%04x: %-5s", regFile[0][PC].word, instructions[CEX]);
+    printf("T: %02x F: %02x C: %02x\n",
+    strction.set4.S, strction.set4.D, c);
+
 }
