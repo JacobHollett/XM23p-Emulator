@@ -43,7 +43,7 @@ void execute(){
             if(debugFlag){
                 printf("       F0: %04x", instructionRegisters[MAR].word);
                 printf("     D0: %04x", instructionRegisters[MBR].word);
-                if(oldIndex == 25 || oldIndex == 26) printf("    E1: %04x", oldIMBR.value);
+                if(oldIndex == LDST || oldIndex == LDRSTR) printf("    E1: %04x", oldIMBR.value);
                 printf("\n");
             }
         }
@@ -64,6 +64,9 @@ void execute(){
     }
 }
 
+//Set IMAR to the instruction location
+//ICTRL to read
+//And increment PC
 void f0(){
     instructionRegisters[MAR].word = regFile[0][PC].word;
     instructionRegisters[CTRL].word = READ;
@@ -76,6 +79,7 @@ void f1(){
     oldIMBR.value = instructionRegisters[MBR].word;
     instructionRegisters[MBR].word = 
         memBlock[instruction].words[instructionRegisters[MAR].word/2];
+    //if there is a bubble, don't update the IR and remove it
     if(!bubble)
         ir.value = instructionRegisters[MBR].word;
     else bubble = 0;
@@ -111,10 +115,10 @@ void d0(){
         INindex = ir.set01.wb+OFFSET2;
     
     else if(ir.set4.code == 3 && ir.set4.upperBit == 0)
-        INindex = 25;
+        INindex = LDST;
     
     else if(ir.set4.upperBit == 1)
-        INindex = 26;
+        INindex = LDRSTR;
     
     else if(ir.set01.upopcode >= MOVGRP)
         INindex = ir.set01.upopcode + OFFSET3;
@@ -211,10 +215,10 @@ void e0(){
     case 24:
         CLRCC(ir.set3.V, ir.set3.SLP, ir.set3.N, ir.set3.Z, ir.set3.C);
         break;
-    case 25:
+    case LDST:
         ldStHandle(ir.set4.index);
         break;
-    case 26:
+    case LDRSTR:
         tempByte = concatLdStr(ir);
         ldrStrHandle(ir.set4.index2, tempByte);
         break;
@@ -235,7 +239,7 @@ void e0(){
 //Doesn't pass off to other functions like e0
 void e1()
 {
-    if(INindex == 25 || INindex == 26){
+    if(INindex == LDST || INindex == LDRSTR){
         switch(dataRegisters[CTRL].bytes[0]){
             case 0:
                 if(!dataRegisters[CTRL].bytes[1])

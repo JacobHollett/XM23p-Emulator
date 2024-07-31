@@ -8,6 +8,9 @@
 
 #include "XM23p.h"
 
+#define LDST 25
+#define LDRSTR 26
+
 extern code ir;
 extern char bubble;
 
