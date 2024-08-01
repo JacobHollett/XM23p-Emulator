@@ -10,9 +10,28 @@
 
 #define LDST 25
 #define LDRSTR 26
+#define EQ 0
+#define NE 1
+#define CS 2
+#define CC 3
+#define MI 4
+#define PL 5
+#define VS 5
+#define VC 6
+#define HI 7
+#define LS 8
+#define GE 10
+#define LT 11
+#define GT 12
+#define LE 13
+#define TR 14
+#define FL 15
 
 extern code ir;
 extern char bubble;
+extern char CEXActive;
+extern char CEXCounts[2];
+extern char CEXCode;
 
 void execute();
 void f0();
@@ -47,5 +66,6 @@ void SETCC(int V, int SLP, int N, int Z, int C);
 void CLRCC(int V, int SLP, int N, int Z, int C);
 void linkBranch(code strction, short offset);
 void Branch(code strction, short offset);
+void cex(char true, char false);
 
 #endif

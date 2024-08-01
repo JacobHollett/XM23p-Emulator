@@ -26,6 +26,17 @@ unsigned char oldIndex;
 //used to flush the pipeline during branching
 char bubble;
 
+//Used to determine if a CEX state is active and currently true/false
+//possible values 0,1,2
+char CEXActive;
+
+//used to track true/false counts in a CEX state
+char CEXCounts[2];
+
+//Set by F1 stage in the event of a CEX instruction
+char CEXCode;
+
+
 //Main execution loop calling execution stages
 void execute(){
     ctrl_c_fnd = FALSE;
@@ -80,9 +91,14 @@ void f1(){
     instructionRegisters[MBR].word = 
         memBlock[instruction].words[instructionRegisters[MAR].word/2];
     //if there is a bubble, don't update the IR and remove it
-    if(!bubble)
+    if(!bubble){
         ir.value = instructionRegisters[MBR].word;
+        if (ir.set4.code == 2 && ir.set4.upperBit == 0)
+            CEXCode = (ir.set4.PRPO<<3) + (ir.set4.DEC<<2) +
+                      (ir.set4.INC<<1) + (ir.set4.WB);
+    }
     else bubble = 0;
+
 }
 
 //decode stage copies contents of IR to
@@ -113,6 +129,9 @@ void d0(){
     
     else if(ir.set1.opcode == GRP3 && ir.set1.rc == 1)
         INindex = ir.set01.wb+OFFSET2;
+
+    else if(ir.set4.code == 2 && ir.set4.upperBit == 0)
+        INindex = CEX;
     
     else if(ir.set4.code == 3 && ir.set4.upperBit == 0)
         INindex = LDST;
@@ -131,6 +150,7 @@ void d0(){
 //takes decoded instruction
 //and passes them to methods to be executed
 //for ld/str sets data registers
+//cases correspond to instruction table in decodeFuncs
 void e0(){
 
     unsigned char tempByte;
@@ -229,6 +249,9 @@ void e0(){
     case BL+1:
         offset = concatBRC(ir);
         Branch(ir, offset);
+        break;
+    case CEX:
+        cex(ir.set4.S, ir.set4.D);
         break;
     default:
         break;

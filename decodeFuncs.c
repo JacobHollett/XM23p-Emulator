@@ -198,9 +198,9 @@ short concatBRC(code strction){
     return temp.word;
 }
 
-
+//Handles printing CEX instructions
 void printCEX(code strction){
-
+    //Concatenates C bits into a single value
     int c = (strction.set4.PRPO<<3) + (strction.set4.DEC<<2) +
             (strction.set4.INC<<1) + (strction.set4.WB);
 

@@ -1,4 +1,6 @@
 /*XM23p instruction definitions    */
+/*Implements each of the XM23p     */
+/*instructions                     */
 /*ECED 3403           JH 07 2024   */
 
 #include "XM23p.h"
@@ -7,7 +9,8 @@
 unsigned char overflowTable[2][2][2] = {{{0,1},{0,0}},
                                         {{0,0},{1,0}}};
 
-
+//Called by each arithmetic instructions that accesses all
+//PSW bits, performs checks on result and operands
 void setPSW(twoWord tempResult, int WB, int RC, int SC, int D){
 
     if (WB){
@@ -418,4 +421,13 @@ void Branch(code strction, short offset){
         bubble = 1;
         ir.value = NOP;
     }
+}
+
+
+void cex(char true, char false){
+
+    switch(CEXCode){
+        
+    }
+
 }
