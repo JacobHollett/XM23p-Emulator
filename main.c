@@ -75,6 +75,7 @@ int main(int argc, char *argv[])
             case 'e':
                 if(debugFlag)
                     printf("Clock   PC      Instruction     Fetch       Decode      Execute\n");
+                initializePipelines();
                 execute();
                 getchar();
                 printf("Clock: %06d PC: %04x    Instruction: %04x",
