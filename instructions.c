@@ -423,11 +423,80 @@ void Branch(code strction, short offset){
     }
 }
 
-
+//Sets CEX state based on condition code
+//and t/f counts
 void cex(char true, char false){
+    //used to determine which part is executed (t/f)
+    int i = 0;
 
     switch(CEXCode){
         
+        case EQ:
+            if(psw.bit[0].b1)
+                i = 1;
+            break;
+        case NE:
+            if(!psw.bit[0].b1)
+                i = 1;
+            break;
+        case CS:
+            if(psw.bit[0].b0)
+                i = 1;
+            break;
+        case CC:
+            if(!psw.bit[0].b0)
+                i = 1;
+            break;
+        case MI:
+            if(psw.bit[0].b2)
+                i = 1;
+            break;
+        case PL:
+            if(!psw.bit[0].b2)
+                i = 1;
+            break;
+        case VS:
+            if(psw.bit[0].b4)
+                i = 1;
+            break;
+        case VC:
+            if(!psw.bit[0].b4)
+                i = 1;
+            break;
+        case HI:
+            if(psw.bit[0].b0 && !psw.bit[0].b1)
+                i = 1;
+            break;
+        case LS:
+            if(!psw.bit[0].b0 || psw.bit[0].b1)
+                i = 1;
+            break;
+        case GE:
+            if(psw.bit[0].b2 == psw.bit[0].b4)
+                i = 1;
+            break;
+        case LT:
+            if(psw.bit[0].b2 != psw.bit[0].b4)
+                i = 1;
+            break;
+        case GT:
+            if(!psw.bit[0].b1 && (psw.bit[0].b4 == psw.bit[0].b2))
+                i = 1;
+            break;
+        case LE:
+            if(psw.bit[0].b1 || (psw.bit[0].b4 != psw.bit[0].b2))
+                i = 1;
+            break;
+        case TR:
+            i = 1;
+            break;
+        case FL:
+            i = 0;
+            break;
     }
+
+    CEXCounts[0] = true;
+    CEXCounts[1] = false;
+    CEXActive = i+1;
 
 }

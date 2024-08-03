@@ -27,7 +27,7 @@ unsigned char oldIndex;
 char bubble;
 
 //Used to determine if a CEX state is active and currently true/false
-//possible values 0,1,2
+//possible values 0,1,2 - > OFF, FALSE, TRUE
 char CEXActive;
 
 //used to track true/false counts in a CEX state

@@ -10,16 +10,20 @@
 
 #define LDST 25
 #define LDRSTR 26
+
+#define CEXTRUE 2
+#define CEXFALSE 1
+
 #define EQ 0
 #define NE 1
 #define CS 2
 #define CC 3
 #define MI 4
 #define PL 5
-#define VS 5
-#define VC 6
-#define HI 7
-#define LS 8
+#define VS 6
+#define VC 7
+#define HI 8
+#define LS 9
 #define GE 10
 #define LT 11
 #define GT 12
