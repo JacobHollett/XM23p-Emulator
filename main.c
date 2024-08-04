@@ -7,6 +7,7 @@
 #include "debug.h"
 #include "execute.h"
 
+
 // Arrays representing data and instruction memory
 memory memBlock[2];
 //execution clock
@@ -36,7 +37,6 @@ int main(int argc, char *argv[])
 
     //XME File to open
     FILE *xmeFile;
-    int stepExecuteFlag = 0;
     initializePipelines();
     printHeader();
 
@@ -86,9 +86,7 @@ int main(int argc, char *argv[])
                 getchar();
                 break;
             case 'g':
-                breakAddr = regFile[0][7].word;
-                if (!stepExecuteFlag) breakAddr+=2;
-                stepExecuteFlag = 1;
+                breakAddr = regFile[0][7].word+=4;
                 execute();
                 getchar();
                 break;

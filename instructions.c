@@ -41,7 +41,7 @@ void setPSW(twoWord tempResult, int WB, int RC, int SC, int D){
 void ADD(int RC, int WB, int SC, int D, int carry){
 
     twoWord tempResult;
-
+    
     if (WB){
         tempResult.value = regFile[RC][SC].bytes[0] + regFile[0][D].bytes[0] + carry;
         setPSW(tempResult, WB, RC, SC, D);
@@ -244,6 +244,11 @@ void MOV(int WB, int SC, int D){
 
     if (WB) regFile[0][D].bytes[0] = regFile[0][SC].bytes[0];
     else regFile[0][D].word = regFile[0][SC].word;
+
+    if(D == PC) {
+        bubble = 1;
+        ir.value = NOP;
+    }
 }
 
 void SWAP(int SC, int D){
@@ -376,6 +381,11 @@ void linkBranch(code strction, short offset){
     //insert NOP into the ir and skip the next decode phase
     ir.value = NOP;
     bubble = 1;
+    //Reset CEX values
+    CEXActive = 0;
+    CEXCurr = 0;
+    CEXCounts[0] = 0;
+    CEXCounts[1] = 0;
 }
 
 //handles each branch instruction aside from branch with link
@@ -420,15 +430,19 @@ void Branch(code strction, short offset){
         regFile[0][PC].word += (offset-2);
         bubble = 1;
         ir.value = NOP;
+        //Reset CEX values
+        CEXActive = 0;
+        CEXCurr = 0;
+        CEXCounts[0] = 0;
+        CEXCounts[1] = 0;
     }
 }
 
 //Sets CEX state based on condition code
 //and t/f counts
 void cex(char true, char false){
-    //used to determine which part is executed (t/f)
+    //cex check returns t/f
     int i = 0;
-
     switch(CEXCode){
         
         case EQ:
@@ -494,9 +508,15 @@ void cex(char true, char false){
             i = 0;
             break;
     }
-
-    CEXCounts[0] = true;
-    CEXCounts[1] = false;
+    /*Set cex state, counts and bubble the ir if*/
+    /*the check returned false                  */
+    CEXCounts[0] = false;
+    CEXCounts[1] = true;
     CEXActive = i+1;
-
+    CEXCurr = 2;
+    //Handles the edge cases of true count being zero at the start
+    if(!i || true == 0){
+        bubble = 1;
+        ir.value = NOP;
+    }
 }

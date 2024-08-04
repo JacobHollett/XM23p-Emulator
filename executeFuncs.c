@@ -6,6 +6,7 @@
 #include "execute.h"
 #include "decode.h"
 
+
 //IMAR, ICTRL, IMDR
 wordContent instructionRegisters[IFILE];
 //DMAR, DCTRL, DMBR
@@ -103,24 +104,26 @@ void f1(){
             CEXCode = (ir.set4.PRPO<<3) + (ir.set4.DEC<<2) +
                       (ir.set4.INC<<1) + (ir.set4.WB);
     }
+    //if there is, insert a nop in the ir and remove the bubble
     else{
+        ir.value = NOP;
         bubble = 0;
     } 
 
-    // // Decrement CEX count if required
-    // if(CEXActive){
-    //     //decrement the current count
-    //     CEXCounts[CEXCurr-1]--;
-    //     //If the current count is zero fall to the next state
-    //     if(!CEXCounts[CEXCurr-1]) CEXCurr--;
+    // Decrement CEX count if required
+    if(CEXActive){
+        //decrement the current count
+        CEXCounts[CEXCurr-1]--;
+        //If the current count is zero fall to the next state
+        if(!CEXCounts[CEXCurr-1]) CEXCurr--;
 
-    //     //Reset bubble if required
-    //     if(CEXCurr != CEXActive && CEXCurr != 0) bubble = 1;
-
-    //     //If we've run through all the instructions set CEX to inactive
-    //     if(!CEXCurr) CEXActive = 0;
-
-    // }
+        //Reset bubble if required
+        if(CEXCurr != CEXActive && CEXCurr != 0) {
+            bubble = 1;
+        }
+        //If we've run through all the instructions set CEX to inactive
+        if(!CEXCurr) CEXActive = 0;
+    }
 
 }
 

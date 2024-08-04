@@ -179,7 +179,7 @@ void printLdStr(int flag, int index, code strction){
 void printBranches(int index, short offset){
 
     printf("%04x: %-5s", regFile[0][PC].word, instructions[index]);
-    printf("OFF:  %04x\n", offset);
+    printf("OF: %04x\n", offset);
 
 }
 
@@ -205,7 +205,7 @@ void printCEX(code strction){
             (strction.set4.INC<<1) + (strction.set4.WB);
 
     printf("%04x: %-5s", regFile[0][PC].word, instructions[CEX]);
-    printf("T: %02x F: %02x C: %02x\n",
+    printf(" T: %x  F: %x   C: %x\n",
     strction.set4.S, strction.set4.D, c);
 
 }

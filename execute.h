@@ -14,22 +14,24 @@
 #define CEXTRUE 2
 #define CEXFALSE 1
 
-#define EQ 0
-#define NE 1
-#define CS 2
-#define CC 3
-#define MI 4
-#define PL 5
-#define VS 6
-#define VC 7
-#define HI 8
-#define LS 9
-#define GE 10
-#define LT 11
-#define GT 12
-#define LE 13
-#define TR 14
-#define FL 15
+enum CEXCode {
+    EQ = 0,   // Equal
+    NE = 1,   // Not Equal
+    CS = 2,   // Carry Set
+    CC = 3,   // Carry Clear
+    MI = 4,   // Minus (Negative)
+    PL = 5,   // Plus (Positive)
+    VS = 6,   // Overflow Set
+    VC = 7,   // Overflow Clear
+    HI = 8,   // Higher
+    LS = 9,   // Lower or Same
+    GE = 10,  // Greater or Equal
+    LT = 11,  // Less Than
+    GT = 12,  // Greater Than
+    LE = 13,  // Less or Equal
+    TR = 14,  // All true
+    FL = 15   // All false
+};
 
 extern code ir;
 extern char bubble;
