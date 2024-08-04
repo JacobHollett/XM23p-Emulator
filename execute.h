@@ -35,6 +35,7 @@ extern code ir;
 extern char bubble;
 extern char CEXActive;
 extern char CEXCounts[2];
+extern char CEXCurr;
 extern char CEXCode;
 
 void execute();

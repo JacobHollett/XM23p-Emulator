@@ -26,12 +26,16 @@ unsigned char oldIndex;
 //used to flush the pipeline during branching
 char bubble;
 
-//Used to determine if a CEX state is active and currently true/false
-//possible values 0,1,2 - > OFF, FALSE, TRUE
+//Used to determine if a CEX state is active and if it returned 
+//true/false. possible values 0,1,2 - > OFF, FALSE, TRUE
 char CEXActive;
 
 //used to track true/false counts in a CEX state
 char CEXCounts[2];
+
+//used to determine which CEX state we're currently in
+//0,1,2 - > OFF, FALSE, TRUE
+char CEXCurr;
 
 //Set by F1 stage in the event of a CEX instruction
 char CEXCode;
@@ -53,7 +57,7 @@ void execute(){
             d0();
             if(debugFlag){
                 printf("       F0: %04x", instructionRegisters[MAR].word);
-                printf("     D0: %04x", instructionRegisters[MBR].word);
+                printf("     D0: %04x", ir.value);
                 if(oldIndex == LDST || oldIndex == LDRSTR) printf("    E1: %04x", oldIMBR.value);
                 printf("\n");
             }
@@ -66,7 +70,7 @@ void execute(){
             if(debugFlag){
                 printf("            ");
                 printf("              ");
-                printf("F1: %04x", instructionRegisters[MBR].word);
+                printf("F1: %04x", ir.value);
                 printf("            ");
                 printf("     E0: %04x\n", oldIMBR.value );
             }
@@ -86,18 +90,37 @@ void f0(){
 
 //Hold old IMBR, fetch new one and make a
 //copy to be manipulated
+//We also tackle bubbling here
 void f1(){
     oldIMBR.value = instructionRegisters[MBR].word;
     instructionRegisters[MBR].word = 
-        memBlock[instruction].words[instructionRegisters[MAR].word/2];
-    //if there is a bubble, don't update the IR and remove it
+            memBlock[instruction].words[instructionRegisters[MAR].word/2];
+
+    //if there is no bubble, proceed as normal
     if(!bubble){
         ir.value = instructionRegisters[MBR].word;
         if (ir.set4.code == 2 && ir.set4.upperBit == 0)
             CEXCode = (ir.set4.PRPO<<3) + (ir.set4.DEC<<2) +
                       (ir.set4.INC<<1) + (ir.set4.WB);
     }
-    else bubble = 0;
+    else{
+        bubble = 0;
+    } 
+
+    // // Decrement CEX count if required
+    // if(CEXActive){
+    //     //decrement the current count
+    //     CEXCounts[CEXCurr-1]--;
+    //     //If the current count is zero fall to the next state
+    //     if(!CEXCounts[CEXCurr-1]) CEXCurr--;
+
+    //     //Reset bubble if required
+    //     if(CEXCurr != CEXActive && CEXCurr != 0) bubble = 1;
+
+    //     //If we've run through all the instructions set CEX to inactive
+    //     if(!CEXCurr) CEXActive = 0;
+
+    // }
 
 }
 
@@ -162,7 +185,6 @@ void e0(){
         ADD(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d, 0);
         break;
     case 1:
-        printf("ADD\n");
         ADD(ir.set1.rc, ir.set1.wb, ir.set1.sc, ir.set1.d, psw.bit[0].b0);
         break;
     case 2:
@@ -335,10 +357,10 @@ void ldrStrHandle(int flag, char byte)
 {
     switch(flag){
         case 0:
-            dataRegisters[MAR].word = (signed int)regFile[0][ir.set4.S].word + (signed int)(byte*(2-ir.set4.WB));
+            dataRegisters[MAR].word = (signed int)regFile[0][ir.set4.S].word + (signed int)(byte);
             break;
         case 1:
-            dataRegisters[MAR].word = (signed int)regFile[0][ir.set4.D].word + (signed int)(byte*(2-ir.set4.WB));
+            dataRegisters[MAR].word = (signed int)regFile[0][ir.set4.D].word + (signed int)(byte);
             break;
     }
     dataRegisters[CTRL].bytes[0] = ir.set4.index2;
